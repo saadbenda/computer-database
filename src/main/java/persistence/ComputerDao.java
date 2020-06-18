@@ -205,7 +205,8 @@ public class ComputerDao extends Dao {
 		System.out.println("ordeer by ----- "+orderBy);
 		if (orderBy.equals("")) {sql=LISTCOMPUTERS;}
 		else {sql=LISTCOMPUTERS+" ORDER BY "+orderBy;}
-		if () {}
+		if () {}  
+		sklksj
 		
 		System.out.println("sql --- "+sql);
 		statement = conn.prepareStatement(sql);

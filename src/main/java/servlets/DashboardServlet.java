@@ -111,10 +111,17 @@ public class DashboardServlet extends HttpServlet {
 		String intro = request.getParameter("introduction");
 		String disco = request.getParameter("discontinued");
 		String company = request.getParameter("company");
-		long count = 0L;
-		long limit;
-		int divisor = 2;
-
+		String limit = request.getParameter("limit");
+		String page = request.getParameter("page");
+		
+		if (limit == null) {limit="10";}
+		if (page == null) {page="1";}
+		
+		session.setAttribute("limit", limit);
+		session.setAttribute("page", page);
+		if (Integer.parseInt(page)>=2) {
+			offset=
+		}
 		if (computer != null) {
 			if (computer.equals("A-Z")) {
 

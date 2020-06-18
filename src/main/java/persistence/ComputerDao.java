@@ -21,7 +21,6 @@ public class ComputerDao extends Dao {
 	private static final String COUNT = "SELECT COUNT(*) AS count FROM computer";
 	private static final String GETCOMPUTER = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT JOIN company on company.id=company_id WHERE computer.id=?";
 	private static final String SEARCH = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT JOIN company on company.id=company_id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ?";
-	
 
 	/*
 	 * private static final String
@@ -202,15 +201,19 @@ public class ComputerDao extends Dao {
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		conn = new Mysql2Connect().getConnection();
 		String sql;
-		System.out.println("ordeer by ----- "+orderBy);
-		if (orderBy.equals("")) {sql=LISTCOMPUTERS;}
-		else {sql=LISTCOMPUTERS+" ORDER BY "+orderBy;}
-		if () {}  
-		sklksj
-		
-		System.out.println("sql --- "+sql);
+		sql = LISTCOMPUTERS;
+		if (!orderBy.equals("")) {
+			sql = LISTCOMPUTERS + " ORDER BY " + orderBy;
+		}
+		if (!limit.equals("")) {
+			sql = LISTCOMPUTERS + " LIMIT " + limit;
+			if (!offset.equals("")) {
+				sql = LISTCOMPUTERS + " " + offset;
+			}
+		}
+		System.out.println("sql --- " + sql);
 		statement = conn.prepareStatement(sql);
-		//statement.setString(1, option);
+		// statement.setString(1, option);
 		rs = statement.executeQuery();
 		while (rs.next()) {
 			Computer computer = mapper.fromResultSetToComputer(rs);
@@ -218,11 +221,6 @@ public class ComputerDao extends Dao {
 		}
 		return computers;
 	}
-	
-	
-	
-	
-	
 
 	/******************************************************/
 

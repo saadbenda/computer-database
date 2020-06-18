@@ -22,6 +22,13 @@
 <link href="css/main.css" rel="stylesheet" media="screen">
 <link href="css/frontValidation.css" rel="stylesheet" media="screen">
 
+<style>
+
+#limit:focus {
+  border-color: #265a88;
+}
+</style>
+
 <p>computerAZ ${sessionScope.computerAZ}</p>
 <p>computerZA ${sessionScope.computerZA}</p>
 <p>companyAZ ${sessionScope.companyAZ}</p>
@@ -216,15 +223,20 @@
 				</a></li>
 			</ul>
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default">
-					<a href="${dashboard}?display=10">10</a>
-				</button>
-				<button type="button" class="btn btn-default">
-					<a href="${dashboard}?display=50">50</a>
-				</button>
-				<button type="button" class="btn btn-default">
-					<a href="${dashboard}?display=100">100</a>
-				</button>
+				<form action="${dashboard}" method="POST">
+					<button id="limit" type="button" name="limit" value="10" class="btn btn-default" 
+					onclick="$(this).closest('form').submit();">
+						10
+					</button>
+					<button id="limit" type="button" name="limit "value="50" class="btn btn-default" 
+					onclick="$(this).closest('form').submit();">
+						50
+					</button>
+					<button id="limit" type="button" name="limit" value="100" class="btn btn-default" 
+					onclick="$(this).closest('form').submit();">
+						100
+					</button>
+				</form>
 			</div>
 	</footer>
 	<script src="js/jquery.min.js"></script>

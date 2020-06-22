@@ -1,5 +1,0 @@
-INDEX VERSION 1.131
-/home/saadbenda/excilys4/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/3255573736.index
-/computer-database/src/main/java
-/home/saadbenda/excilys4/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/77933627.index
-/computer-database/src/main/java

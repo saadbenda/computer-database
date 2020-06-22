@@ -4,6 +4,9 @@ body {
     padding-bottom: 70px;
 }
 
+a:hover {
+  text-decoration: none;
+}
 footer {
     position:fixed;
     bottom:0;
@@ -31,3 +34,6 @@ input[type='checkbox'] {
 form .erreur {
     color: red;
 }
+
+
+

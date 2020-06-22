@@ -14,12 +14,15 @@ public class ComputerDao extends Dao {
 	private static final String ADDCOMPUTER = "INSERT INTO computer (name, introduced,discontinued,company_id) VALUES(?,?,?,?)";
 	private static final String UPDATECOMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 	private static final String DELETECOMPUTER = "DELETE FROM computer WHERE id=?";
-	//private static final String LISTCOMPUTERS = "SELECT (computer.id, computer.name, introduced, discontinued, company.id, company.name) FROM computer JOIN company ON company_id=company.id LIMIT 10";
+	// private static final String LISTCOMPUTERS = "SELECT (computer.id,
+	// computer.name, introduced, discontinued, company.id, company.name) FROM
+	// computer JOIN company ON company_id=company.id LIMIT 10";
 	private static final String LISTCOMPUTERS = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT JOIN company on company.id=company_id ORDER BY computer.id LIMIT ? OFFSET ?";
 	private static final String COUNT = "SELECT COUNT(*) AS count FROM computer";
 	private static final String GETCOMPUTER = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT JOIN company on company.id=company_id WHERE computer.id=?";
+	private static final String SEARCH = "SELECT computer.id, computer.name, introduced, discontinued, company.id, company.name FROM computer LEFT JOIN company on company.id=company_id WHERE LOWER(computer.name) LIKE ? OR LOWER(company.name) LIKE ?";
 	
-	
+
 	/*
 	 * private static final String
 	 * FINDCOMPUTERBYID="SELECT id,name, introduced,discontinued,company_id FROM computer where id=?"
@@ -49,26 +52,27 @@ public class ComputerDao extends Dao {
 	 *         operation, and the operation is not a mass delete on a segmented
 	 *         table space. 0, if no rows are affected by the operation. -1, if the
 	 *         operation is a mass delete on a segmented table space.
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 
 	public int addComputer(Computer cp) throws SQLException {
-		//int valueType = Types.NULL;
+		// int valueType = Types.NULL;
 		conn = new Mysql2Connect().getConnection();
 		statement = conn.prepareStatement(ADDCOMPUTER);
 		statement.setObject(1, cp.getName(), Types.VARCHAR);
 		statement.setObject(2, cp.getIntroduced(), Types.DATE);
 		statement.setObject(3, cp.getDiscontinued(), Types.DATE);
-		/*if (!cp.getCompany().equals(null)) {
-			System.out.println("company is not null in computerDao");
-			valueType=Types.BIGINT;
-		}
-		statement.setObject(4, cp.getCompany().getId(), valueType);*/
-		
-		if (cp.getCompany()!=null) {
-		statement.setObject(4, cp.getCompany().getId(), Types.BIGINT);
-		}else {
-			statement.setNull(4,java.sql.Types.NULL);
+		/*
+		 * if (!cp.getCompany().equals(null)) {
+		 * System.out.println("company is not null in computerDao");
+		 * valueType=Types.BIGINT; } statement.setObject(4, cp.getCompany().getId(),
+		 * valueType);
+		 */
+
+		if (cp.getCompany() != null) {
+			statement.setObject(4, cp.getCompany().getId(), Types.BIGINT);
+		} else {
+			statement.setNull(4, java.sql.Types.NULL);
 		}
 		rsI = statement.executeUpdate();
 		this.closeConnection(conn);
@@ -76,12 +80,13 @@ public class ComputerDao extends Dao {
 		return rsI;
 	}
 
-	public int updateComputer(String name, LocalDate introduced, LocalDate discontinued, long companyId,long computerId) throws SQLException {
+	public int updateComputer(String name, LocalDate introduced, LocalDate discontinued, long companyId,
+			long computerId) throws SQLException {
 		conn = new Mysql2Connect().getConnection();
 		statement = conn.prepareStatement(UPDATECOMPUTER);
 		statement.setObject(1, name, Types.VARCHAR);
-		//Timestamp timestamp  = Timestamp.valueOf(introduced.atStartOfDay());
-		//System.out.println("timestamp "+timestamp);
+		// Timestamp timestamp = Timestamp.valueOf(introduced.atStartOfDay());
+		// System.out.println("timestamp "+timestamp);
 		statement.setObject(2, introduced, Types.DATE);
 		statement.setObject(3, discontinued, Types.DATE);
 		statement.setObject(4, companyId, java.sql.Types.INTEGER);// can be null
@@ -104,13 +109,13 @@ public class ComputerDao extends Dao {
 
 	public ArrayList<Computer> getAllComputers() throws Exception {
 		int offset = 0;
-		long limit =99999999999999L;
+		long limit = 99999999999999L;
 		Mapper mapper = new Mapper();
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		conn = new Mysql2Connect().getConnection();
 		statement = conn.prepareStatement(LISTCOMPUTERS);
-		statement.setObject(1, limit , Types.BIGINT);
-		statement.setObject(2, offset , Types.BIGINT);
+		statement.setObject(1, limit, Types.BIGINT);
+		statement.setObject(2, offset, Types.BIGINT);
 		rs = statement.executeQuery();
 		while (rs.next()) {
 			Computer computer = mapper.fromResultSetToComputer(rs);
@@ -121,14 +126,14 @@ public class ComputerDao extends Dao {
 		this.closeResultSet(rs);
 		return computers;
 	}
-	
+
 	public ArrayList<Computer> getAllComputers(long limit, long offset) throws Exception {
 		Mapper mapper = new Mapper();
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		conn = new Mysql2Connect().getConnection();
 		statement = conn.prepareStatement(LISTCOMPUTERS);
-		statement.setObject(1, limit , Types.BIGINT);
-		statement.setObject(2, offset , Types.BIGINT);
+		statement.setObject(1, limit, Types.BIGINT);
+		statement.setObject(2, offset, Types.BIGINT);
 		rs = statement.executeQuery();
 		while (rs.next()) {
 			Computer computer = mapper.fromResultSetToComputer(rs);
@@ -139,10 +144,10 @@ public class ComputerDao extends Dao {
 		this.closeResultSet(rs);
 		return computers;
 	}
-	
+
 	public long countComputers() throws SQLException {
 		conn = new Mysql2Connect().getConnection();
-		long count=0;
+		long count = 0;
 		statement = conn.prepareStatement(COUNT);
 		rs = statement.executeQuery();
 		if (rs.next()) {
@@ -153,14 +158,15 @@ public class ComputerDao extends Dao {
 		this.closeResultSet(rs);
 		return count;
 	}
+
 	public Computer getComputer(long id) throws Exception {
 		Mapper mapper = new Mapper();
-		Computer computer=null;
+		Computer computer = null;
 		conn = new Mysql2Connect().getConnection();
 		statement = conn.prepareStatement(GETCOMPUTER);
-		statement.setObject(1, id , Types.BIGINT);
+		statement.setObject(1, id, Types.BIGINT);
 		rs = statement.executeQuery();
-		//System.out.println("rs "+rs.getString("computer.name"));
+		// System.out.println("rs "+rs.getString("computer.name"));
 		if (rs.next()) {
 			computer = mapper.fromResultSetToComputer(rs);
 		}
@@ -168,8 +174,54 @@ public class ComputerDao extends Dao {
 		this.closePreparedStatement(statement);
 		this.closeResultSet(rs);
 		return computer;
-		
+
 	}
+
+	public ArrayList<Computer> searchComputer(String search) throws Exception {
+		Mapper mapper = new Mapper();
+		ArrayList<Computer> computers = new ArrayList<Computer>();
+		conn = new Mysql2Connect().getConnection();
+		statement = conn.prepareStatement(SEARCH);
+		search.replace("%", "");
+		statement.setString(1, search);
+
+		// statement.setObject(2, "", Types.DATE);
+		// statement.setObject(3, "", Types.DATE);
+		statement.setString(2, search);
+		rs = statement.executeQuery();
+		while (rs.next()) {
+			Computer computer = mapper.fromResultSetToComputer(rs);
+			computers.add(computer);
+		}
+		return computers;
+
+	}
+
+	public ArrayList<Computer> orderBy(String orderBy, String limit, String offset) throws Exception {
+		Mapper mapper = new Mapper();
+		ArrayList<Computer> computers = new ArrayList<Computer>();
+		conn = new Mysql2Connect().getConnection();
+		String sql;
+		System.out.println("ordeer by ----- "+orderBy);
+		if (orderBy.equals("")) {sql=LISTCOMPUTERS;}
+		else {sql=LISTCOMPUTERS+" ORDER BY "+orderBy;}
+		if () {}
+		
+		System.out.println("sql --- "+sql);
+		statement = conn.prepareStatement(sql);
+		//statement.setString(1, option);
+		rs = statement.executeQuery();
+		while (rs.next()) {
+			Computer computer = mapper.fromResultSetToComputer(rs);
+			computers.add(computer);
+		}
+		return computers;
+	}
+	
+	
+	
+	
+	
 
 	/******************************************************/
 

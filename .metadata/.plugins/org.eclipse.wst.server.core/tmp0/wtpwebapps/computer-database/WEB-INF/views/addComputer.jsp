@@ -23,7 +23,7 @@
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1>Add Computer</h1>
-					<form action="${addComputer} method="POST" id="addComputer"
+					<form action="AddComputerServlet" method="POST" id="addComputer"
 						name="addComputer">
 						<fieldset>
 							<div class="form-group">

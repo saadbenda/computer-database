@@ -136,6 +136,18 @@ import validation.Validation;
 		return computerDao.countComputers();
 	}
 
+	public ArrayList<Computer> searchComputer(String search) throws Exception {
+		ComputerDao computerDao = new ComputerDao();
+		ArrayList<Computer> computers = computerDao.searchComputer(search);
+		return computers;
+
+	}
+	public ArrayList<Computer> orderBy(String orderBy) throws Exception {
+		ComputerDao computerDao = new ComputerDao();
+		ArrayList<Computer> computers = computerDao.orderBy(orderBy);
+		return computers;
+	}
+
 	
 	
 	/*********************************************************************************************/

@@ -144,7 +144,7 @@ import validation.Validation;
 	}
 	public ArrayList<Computer> orderBy(String orderBy) throws Exception {
 		ComputerDao computerDao = new ComputerDao();
-		ArrayList<Computer> computers = computerDao.orderBy(orderBy);
+		ArrayList<Computer> computers = computerDao.orderBy(orderBy, orderBy, orderBy);
 		return computers;
 	}
 

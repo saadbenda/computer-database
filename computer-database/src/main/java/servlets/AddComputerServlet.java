@@ -10,11 +10,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
+import com.zaxxer.hikari.HikariDataSource;
 
 import dto.CompanyDto;
 import dto.CompanyDto.CompanyDtoBuilder;
@@ -26,20 +38,63 @@ import model.Company;
 import model.Computer;
 import persistence.CompanyDao;
 import service.Service;
+import spring.SpringConfiguration;
 
 import validation.Validation;
 
+
+//@Controller
+//@RequestMapping("/AddComputerServlet")
+
+
 @WebServlet("/AddComputerServlet")
+//@ComponentScan({"com.excilys.service", "com.excilys.servlets", "com.excilys.persistence", "com.excilys.mapper"})
+
 public class AddComputerServlet extends HttpServlet {
 	/**
 	 * generated serialVersionUID
 	 */
+
+	/*
+	 * public void init(ServletConfig config) throws ServletException {
+	 * super.init(config);
+	 * SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this); }
+	 */
+
+	// private static AnnotationConfigApplicationContext appContext =
+	// SpringConfiguration.getContext();
+
+	// private Service service = appContext.getBean(Service.class);
+	// private Service service =
+	// SpringConfiguration.getContext().getBean(Service.class);
+
 	private static final long serialVersionUID = -6584495854846266599L;
 	public static final String ADDCOMPUTER = "WEB-INF/views/addComputer.jsp";
 	// private Map<String, String> errors = new HashMap<String, String>();
 
+	//ApplicationContext appContext = new AnnotationConfigApplicationContext(SpringConfiguration.class);
+	//Service service = appContext.getBean(Service.class);
+	
+	
+
+	
+	
+	//ApplicationContext appContext = new AnnotationConfigApplicationContext(SpringConfiguration.class);
+	//Service service = appContext.getBean(Service.class);
+	
+	Service service = SpringConfiguration.getContext().getBean(Service.class);
+    //CompanyService companyService = CDBConfig.getContext().getBean(CompanyService.class);
+
+	/*@Autowired
+	Service service;
+ 
+	public void init(ServletConfig config) throws ServletException {
+		super.init(config);
+    	SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}*/
+
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Service service = new Service();
+
 		/* Affichage de la page d'inscription */
 		/*
 		 * String test = "1"; String test2 = "2"; request.setAttribute("computerName",
@@ -77,7 +132,7 @@ public class AddComputerServlet extends HttpServlet {
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		Service service = new Service();
+
 		Validation validation = new Validation();
 		MapperDto mapperDto = new MapperDto();
 		MapperDates mapperDates = new MapperDates();
@@ -90,28 +145,24 @@ public class AddComputerServlet extends HttpServlet {
 		String disco = request.getParameter("discontinued");
 		String companyId = request.getParameter("companyId");
 
-		System.out.println("computer name : "+computerName);
-		System.out.println("intro : "+intro);
-		System.out.println("disco : "+disco);
-		System.out.println("company id : "+companyId);
-		
-		try {
-			validation.computerName(computerName);
-		} catch (Exception e3) {
-			e3.printStackTrace();
-		}
-		
-		try {
-			validation.dateFormat(intro);
-			validation.dateFormat(disco);
-		} catch (ParseException e2) {
-			e2.printStackTrace();
-			System.out.println("invalid date format");
-		}
+		System.out.println("computer name : " + computerName);
+		System.out.println("intro : " + intro);
+		System.out.println("disco : " + disco);
+		System.out.println("company id : " + companyId);
+
+		/*
+		 * try { validation.computerName(computerName); } catch (Exception e3) {
+		 * e3.printStackTrace(); }
+		 */
+
+		/*
+		 * try { validation.dateFormat(intro); validation.dateFormat(disco); } catch
+		 * (ParseException e2) { e2.printStackTrace();
+		 * System.out.println("invalid date format"); }
+		 */
 		String companyName = null;
 		CompanyDto companyDto = null;
-		//Optional<String> companyIdO = Optional.of(companyId);
-		
+		// Optional<String> companyIdO = Optional.of(companyId);
 
 		if (companyId.equals("null")) {
 			System.out.println("companyId is null");

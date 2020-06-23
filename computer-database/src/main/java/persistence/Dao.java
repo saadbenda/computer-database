@@ -4,11 +4,14 @@ package persistence;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import org.springframework.stereotype.Repository;
+
 import java.sql.Connection;
 
 import mapper.Mapper;
 
-
+@Repository
 public class Dao {
 	protected PreparedStatement statement;
 	protected ResultSet rs;

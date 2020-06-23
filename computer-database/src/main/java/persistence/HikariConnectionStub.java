@@ -8,11 +8,11 @@ import java.util.Properties;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-public class HikariConnection {
+public class HikariConnectionStub {
 	private static HikariConfig config = new HikariConfig();
 	private static HikariDataSource ds;
 	private static Connection connection=null;
-	private static HikariConnection instance;
+	private static HikariConnectionStub instance;
 
 	static {
 		/* config = new HikariConfig("datasource.properties");
@@ -36,7 +36,7 @@ public class HikariConnection {
 
 
 	}
-	 private HikariConnection() {}
+	 private HikariConnectionStub() {}
 
 	    public static Connection getConnection() {     
 			try {

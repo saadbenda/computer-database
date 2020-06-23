@@ -2,6 +2,8 @@ package mapper;
 
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Component;
+
 import dto.CompanyDto;
 import model.Company;
 import model.Company.CompanyBuilder;
@@ -14,7 +16,10 @@ import model.Computer.ComputerBuilder;
 import mapper.MapperDates;
 
 
+@Component
 public class MapperDto {
+	
+	
 	
 	
 	public CompanyDto fromCompanyToCompanyDto(Company company) {

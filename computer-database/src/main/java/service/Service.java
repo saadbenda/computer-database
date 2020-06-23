@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import dto.ComputerDto;
 import dto.ComputerDto.ComputerDtoBuilder;
 import mapper.MapperDto;
@@ -27,8 +29,19 @@ import validation.Validation;
 
 
 
-/*CLI*/
+
+@org.springframework.stereotype.Service
 	public class Service {
+	
+	@Autowired
+	private CompanyDao companyDao;
+	
+	@Autowired
+	private ComputerDao computerDao;
+	
+
+	
+	
 		//ComputerDao computerDao = new ComputerDao();
 		//CompanyDao companyDao = new CompanyDao();
 		//MapperDates mapperDates = new MapperDates();
@@ -68,13 +81,11 @@ import validation.Validation;
 	 */
 	
 	public int addComputer(Computer computer) throws SQLException {
-		ComputerDao computerDao = new ComputerDao();
 		int error = computerDao.addComputer(computer);
 		return error;
 	}
 	
 	public int deleteComputer(String computerId) throws SQLException {
-		ComputerDao computerDao = new ComputerDao();
 		long cputerId = Long.parseLong(computerId);
 		int error = computerDao.deleteComputer(cputerId);
 		return error;
@@ -99,29 +110,25 @@ import validation.Validation;
 
 	
 	public ArrayList<Company> getCompanies() throws SQLException {
-		CompanyDao companyDao = new CompanyDao();
+		
 		ArrayList<Company> companyList = companyDao.getAllCompanies();
 		return companyList;
 	}
 	
 	public ArrayList<Computer> getComputers() throws Exception {
-		ComputerDao computerDao = new ComputerDao();
 		ArrayList<Computer> computerList = computerDao.getAllComputers();
 		return computerList;
 	}
 	public ArrayList<Computer> getComputers(long limit, long offset) throws Exception {
-		ComputerDao computerDao = new ComputerDao();
 		ArrayList<Computer> computerList = computerDao.getAllComputers(limit, offset);
 		return computerList;
 	}
 	
 	public Computer getComputer(long id) throws Exception {
-		ComputerDao computerDao = new ComputerDao();
 		Computer computer = computerDao.getComputer(id);
 		return computer;
 	}
 	public String findCompanyName(long companyId) throws SQLException {
-	CompanyDao companyDao = new CompanyDao();
 	String cpany = companyDao.findCompanyName(companyId);
 	return cpany;
 }

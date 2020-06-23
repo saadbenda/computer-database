@@ -19,10 +19,12 @@ public class Company {
 	public long getId() {
 		return id;
 	}
-
+	
+	
 	public static class CompanyBuilder {
 		private long idC;
 		private String nameC;
+		
 		
 		public CompanyBuilder withId(long id) {
 			this.idC=id;

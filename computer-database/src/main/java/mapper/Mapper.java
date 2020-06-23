@@ -5,18 +5,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import service.Service;
 import model.Company;
 import model.Computer;
 import mapper.MapperDates;
 
+@Component
 public class Mapper {
 	//Service service=new Service();
 	//MapperDates mapperDates = new MapperDates();
 	
+	@Autowired
+	MapperDates mapperDates;
+	@Autowired
+	Service service;
+	
 	public Computer fromResultSetToComputer(ResultSet rs) throws Exception {
-		MapperDates mapperDates = new MapperDates();
+		
 		Service service=new Service();
 		//long companyId = rs.getLong("company_id");
 		long companyId= rs.getLong("company.id");
@@ -40,7 +48,7 @@ public class Mapper {
 	}
 
 	public Company fromResultSetToCompany(ResultSet rs) throws SQLException {
-		Service service=new Service();
+		
 		long id = rs.getLong("id");
 		String name = rs.getString("name");
 		Company company = service.createCompany(id, name);

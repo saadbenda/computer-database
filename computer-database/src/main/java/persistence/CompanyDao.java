@@ -3,9 +3,17 @@ package persistence;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
+
 import model.Company;
 import mapper.Mapper;
 
+
+@Repository
+//@Scope("prototype")
 public class CompanyDao extends Dao {
 	private static final String FINDCOMPANY = "SELECT id,name FROM company WHERE id=?";
 	private static final String LISTCOMPANIES = "SELECT id,name FROM company";
@@ -18,7 +26,9 @@ public class CompanyDao extends Dao {
 	 *         operation is a mass delete on a segmented table space.
 	 */
 
-
+	@Autowired
+	Mapper mapper;
+	
 	public int addCompany(Company company) throws SQLException {
 		conn = new Mysql2Connect().getConnection();
 		statement = conn.prepareStatement(ADDCOMPANY);
@@ -32,8 +42,10 @@ public class CompanyDao extends Dao {
 
 	public ArrayList<Company> getAllCompanies() throws SQLException {
 		ArrayList<Company> companyList = new ArrayList<Company>();
-		Mapper mapper = new Mapper();
-		conn = new Mysql2Connect().getConnection();
+		
+		
+		
+		conn = HikariConnect.getConnection().getConnect();
 		statement = conn.prepareStatement(LISTCOMPANIES);
 		rs = statement.executeQuery();
 		while (rs.next()) {

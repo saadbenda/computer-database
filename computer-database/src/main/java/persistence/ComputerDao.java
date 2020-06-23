@@ -6,10 +6,16 @@ import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Repository;
+
 import mapper.Mapper;
 
 import model.Computer;
 
+@Repository
+//@Scope("prototype")
 public class ComputerDao extends Dao {
 	private static final String ADDCOMPUTER = "INSERT INTO computer (name, introduced,discontinued,company_id) VALUES(?,?,?,?)";
 	private static final String UPDATECOMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
@@ -55,9 +61,13 @@ public class ComputerDao extends Dao {
 	 * @throws SQLException
 	 */
 
+	
+	@Autowired
+	Mapper mapper;
+	
 	public int addComputer(Computer cp) throws SQLException {
 		// int valueType = Types.NULL;
-		conn = new Mysql2Connect().getConnection();
+		conn = HikariConnect.getConnection().getConnect();
 		statement = conn.prepareStatement(ADDCOMPUTER);
 		statement.setObject(1, cp.getName(), Types.VARCHAR);
 		statement.setObject(2, cp.getIntroduced(), Types.DATE);
@@ -80,8 +90,7 @@ public class ComputerDao extends Dao {
 		return rsI;
 	}
 
-	public int updateComputer(String name, LocalDate introduced, LocalDate discontinued, long companyId,
-			long computerId) throws SQLException {
+	public int updateComputer(String name, LocalDate introduced, LocalDate discontinued, long companyId, long computerId) throws SQLException {
 		conn = new Mysql2Connect().getConnection();
 		statement = conn.prepareStatement(UPDATECOMPUTER);
 		statement.setObject(1, name, Types.VARCHAR);
@@ -110,7 +119,7 @@ public class ComputerDao extends Dao {
 	public ArrayList<Computer> getAllComputers() throws Exception {
 		int offset = 0;
 		long limit = 99999999999999L;
-		Mapper mapper = new Mapper();
+		
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		conn = new Mysql2Connect().getConnection();
 		statement = conn.prepareStatement(LISTCOMPUTERS);
@@ -128,7 +137,7 @@ public class ComputerDao extends Dao {
 	}
 
 	public ArrayList<Computer> getAllComputers(long limit, long offset) throws Exception {
-		Mapper mapper = new Mapper();
+		
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		conn = new Mysql2Connect().getConnection();
 		statement = conn.prepareStatement(LISTCOMPUTERS);
@@ -160,7 +169,7 @@ public class ComputerDao extends Dao {
 	}
 
 	public Computer getComputer(long id) throws Exception {
-		Mapper mapper = new Mapper();
+		
 		Computer computer = null;
 		conn = new Mysql2Connect().getConnection();
 		statement = conn.prepareStatement(GETCOMPUTER);
@@ -178,7 +187,7 @@ public class ComputerDao extends Dao {
 	}
 
 	public ArrayList<Computer> searchComputer(String search) throws Exception {
-		Mapper mapper = new Mapper();
+		
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		conn = new Mysql2Connect().getConnection();
 		statement = conn.prepareStatement(SEARCH);
@@ -198,14 +207,14 @@ public class ComputerDao extends Dao {
 	}
 
 	public ArrayList<Computer> orderBy(String orderBy, String limit, String offset) throws Exception {
-		Mapper mapper = new Mapper();
+		
 		ArrayList<Computer> computers = new ArrayList<Computer>();
 		conn = new Mysql2Connect().getConnection();
 		String sql;
 		System.out.println("ordeer by ----- "+orderBy);
 		if (orderBy.equals("")) {sql=LISTCOMPUTERS;}
 		else {sql=LISTCOMPUTERS+" ORDER BY "+orderBy;}
-		if () {}
+		
 		
 		System.out.println("sql --- "+sql);
 		statement = conn.prepareStatement(sql);

@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+
 import org.springframework.stereotype.Repository;
 
 import model.Company;
@@ -43,7 +47,30 @@ public class CompanyDao extends Dao {
 	public ArrayList<Company> getAllCompanies() throws SQLException {
 		ArrayList<Company> companyList = new ArrayList<Company>();
 		
+		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", 1);
+		//SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(employee);
 		
+		/* return NamedParameterJdbcTemplate.queryForObject("SELECT FIRST_NAME FROM EMPLOYEE WHERE ID = :id", namedParameters, String.class);*/
+		 
+		 NamedParameterJdbcTemplate.
+		
+		 return namedParameterJdbcTemplate.queryForObject(
+				  "SELECT FIRST_NAME FROM EMPLOYEE WHERE ID = :id", namedParameters, String.class);
+		
+		 SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(employee);
+		 return namedParameterJdbcTemplate.queryForObject(
+		   SELECT_BY_ID, namedParameters, Integer.class);
+		 
+		 
+		 String query = "SELECT * FROM EMPLOYEE WHERE ID = ?";
+		 List<Employee> employees = jdbcTemplate.queryForObject(query, new Object[] { id }, new EmployeeRowMapper());
+		 
+		 JdbcTemplate vJdbcTemplate = new JdbcTemplate(getDataSource());
+	        int vNbrTickets = vJdbcTemplate.queryForObject(
+	            vSQL, Integer.class,
+	            pRechercheTicket.getAuteurId(),
+	            pRechercheTicket.getProjetId());
+		 
 		
 		conn = HikariConnect.getConnection().getConnect();
 		statement = conn.prepareStatement(LISTCOMPANIES);

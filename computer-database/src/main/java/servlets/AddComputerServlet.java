@@ -79,6 +79,7 @@ public class AddComputerServlet extends HttpServlet {
 	//Service service = appContext.getBean(Service.class);
 	
 	Service service = SpringConfiguration.getContext().getBean(Service.class);
+	
     //CompanyService companyService = CDBConfig.getContext().getBean(CompanyService.class);
 
 	/*@Autowired

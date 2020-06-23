@@ -31,9 +31,6 @@ public class HikariConnect {
 		return hikariConnect;
 	}
 
-	
-	
-	
 	public Connection getConnect() throws SQLException {
 		return ds.getConnection();
 	}

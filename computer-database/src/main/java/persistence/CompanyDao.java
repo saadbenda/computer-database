@@ -59,14 +59,14 @@ public class CompanyDao extends Dao {
 	}
 
 	public String findCompanyName(long companyId) throws SQLException {
-		Mapper mapper = new Mapper();
 		Company company;
 		String companyName = null;
-		conn = new Mysql2Connect().getConnection();
+		conn = HikariConnect.getConnection().getConnect();
 		statement = conn.prepareStatement(FINDCOMPANY);
 		statement.setObject(1, companyId, Types.BIGINT);
 		rs = statement.executeQuery();
 		while (rs.next()) {
+			
 			company = mapper.fromResultSetToCompany(rs);
 			companyName = company.getName();
 		}

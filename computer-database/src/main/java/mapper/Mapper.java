@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import service.Service;
 import model.Company;
 import model.Computer;
+import persistence.HikariConnect;
 import mapper.MapperDates;
 
 @Component
@@ -51,6 +52,8 @@ public class Mapper {
 		
 		long id = rs.getLong("id");
 		String name = rs.getString("name");
+		System.out.println(name);
+		System.out.println("debug "+service.getClass());
 		Company company = service.createCompany(id, name);
 		return company;
 		

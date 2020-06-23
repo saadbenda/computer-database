@@ -39,7 +39,8 @@ import validation.Validation;
 	@Autowired
 	private ComputerDao computerDao;
 	
-
+	@Autowired
+	private MapperDates mapperDates;
 	
 	
 		//ComputerDao computerDao = new ComputerDao();
@@ -92,8 +93,7 @@ import validation.Validation;
 	}
 	
 	public int updateComputer(String name, String introduced, String discontinued, String companyId, String computerId) throws SQLException{
-		MapperDates mapperDates = new MapperDates();
-		ComputerDao computerDao = new ComputerDao();
+		
 		LocalDate intro = mapperDates.fromStringToLocalDate(introduced);
 		LocalDate disco = mapperDates.fromStringToLocalDate(discontinued);
 		//validation.validationIntroDisco(intro, disco);
@@ -139,18 +139,18 @@ import validation.Validation;
 	}*/
 
 	public long countComputers() throws SQLException {
-		ComputerDao computerDao = new ComputerDao();
+		
 		return computerDao.countComputers();
 	}
 
 	public ArrayList<Computer> searchComputer(String search) throws Exception {
-		ComputerDao computerDao = new ComputerDao();
+		
 		ArrayList<Computer> computers = computerDao.searchComputer(search);
 		return computers;
 
 	}
 	public ArrayList<Computer> orderBy(String orderBy) throws Exception {
-		ComputerDao computerDao = new ComputerDao();
+		
 		ArrayList<Computer> computers = computerDao.orderBy(orderBy, orderBy, orderBy);
 		return computers;
 	}

@@ -48,7 +48,7 @@ import validation.Validation;
 
 
 @WebServlet("/AddComputerServlet")
-//@ComponentScan({"com.excilys.service", "com.excilys.servlets", "com.excilys.persistence", "com.excilys.mapper"})
+@ComponentScan(basePackages = "com.excilys.cdb")
 
 public class AddComputerServlet extends HttpServlet {
 	/**
@@ -75,23 +75,19 @@ public class AddComputerServlet extends HttpServlet {
 	//ApplicationContext appContext = new AnnotationConfigApplicationContext(SpringConfiguration.class);
 	//Service service = appContext.getBean(Service.class);
 	
-	
-
-	
-	
 	//ApplicationContext appContext = new AnnotationConfigApplicationContext(SpringConfiguration.class);
 	//Service service = appContext.getBean(Service.class);
 	
-	Service service = SpringConfiguration.getContext().getBean(Service.class);
+	//Service service = SpringConfiguration.getContext().getBean(Service.class);
     //CompanyService companyService = CDBConfig.getContext().getBean(CompanyService.class);
 
-	/*@Autowired
+	@Autowired
 	Service service;
  
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
     	SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}*/
+	}
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 

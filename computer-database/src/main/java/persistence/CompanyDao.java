@@ -52,7 +52,7 @@ public class CompanyDao extends Dao {
 		
 		/* return NamedParameterJdbcTemplate.queryForObject("SELECT FIRST_NAME FROM EMPLOYEE WHERE ID = :id", namedParameters, String.class);*/
 		 
-		 NamedParameterJdbcTemplate.
+		 NamedParameterJdbcTemplate.que
 		
 		 return namedParameterJdbcTemplate.queryForObject(
 				  "SELECT FIRST_NAME FROM EMPLOYEE WHERE ID = :id", namedParameters, String.class);

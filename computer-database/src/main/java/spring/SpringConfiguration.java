@@ -1,6 +1,8 @@
 package spring;
 
 
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -10,6 +12,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.web.context.AbstractContextLoaderInitializer;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
 import com.zaxxer.hikari.HikariConfig;
@@ -41,14 +45,27 @@ public class SpringConfiguration {
 		return new HikariDataSource(hikariConfig());
 	}*/
 	
+	
+	//By default, the bean name will be that of the method name
 	@Bean(destroyMethod = "close")
-	@Scope("singleton")
-	public DataSource dataSource(){
+	public DataSource DataSourceBean(){
 		HikariConfig hikariConfig = new HikariConfig("/datasource.properties");
 		HikariDataSource dataSource = new HikariDataSource(hikariConfig);
 	    return dataSource;
 	}
-
+	
+	@Bean
+	public NamedParameterJdbcTemplate JdbcTemplateBean() {
+		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(DataSourceBean());
+        return namedParameterJdbcTemplate;
+	}
+	
+	/*
+    public void onStartup(ServletContext servletContext) throws ServletException {
+        super.onStartup(servletContext);
+        registerDispatcherServlet(servletContext);
+    }*/
+	
 	/*
 	 * @Bean public ServletRegistrationBean<HttpServlet> countryServlet() {
 	 * ServletRegistrationBean<HttpServlet> servRegBean = new

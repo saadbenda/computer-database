@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 import service.Service;
@@ -15,7 +16,7 @@ import persistence.HikariConnect;
 import mapper.MapperDates;
 
 @Component
-public class Mapper {
+public class Mapper implements RowMapper<T>{
 	//Service service=new Service();
 	//MapperDates mapperDates = new MapperDates();
 	
@@ -24,9 +25,11 @@ public class Mapper {
 	@Autowired
 	Service service;
 	
-	public Computer fromResultSetToComputer(ResultSet rs) throws Exception {
+	
+	
+	public Computer fromResultSetToComputer(ResultSet rs) throws Exception{
 		
-		Service service=new Service();
+		
 		//long companyId = rs.getLong("company_id");
 		long companyId= rs.getLong("company.id");
 		String companyName = rs.getString("company.name");
@@ -58,5 +61,7 @@ public class Mapper {
 		return company;
 		
 	}
+
+	
 
 }

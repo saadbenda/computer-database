@@ -4,8 +4,11 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 
+import javax.sql.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -13,6 +16,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import model.Company;
+import mapper.ComputerMapper;
 import mapper.Mapper;
 
 
@@ -31,7 +35,13 @@ public class CompanyDao extends Dao {
 	 */
 
 	@Autowired
-	Mapper mapper;
+	ComputerMapper computerMapper;
+	
+	@Autowired
+	JdbcTemplate jdbcT;
+	
+	@Autowired
+	NamedParameterJdbcTemplate namedJdbc;
 	
 	public int addCompany(Company company) throws SQLException {
 		conn = new Mysql2Connect().getConnection();
@@ -52,7 +62,11 @@ public class CompanyDao extends Dao {
 		
 		/* return NamedParameterJdbcTemplate.queryForObject("SELECT FIRST_NAME FROM EMPLOYEE WHERE ID = :id", namedParameters, String.class);*/
 		 
-		 NamedParameterJdbcTemplate.que
+		
+		
+		//JdbcTemplate  j = new JdbcTemplate();
+		 JdbcTemplate.query(LISTCOMPANIES,computerMapper);
+		 
 		
 		 return namedParameterJdbcTemplate.queryForObject(
 				  "SELECT FIRST_NAME FROM EMPLOYEE WHERE ID = :id", namedParameters, String.class);

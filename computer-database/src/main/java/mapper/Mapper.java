@@ -16,7 +16,7 @@ import persistence.HikariConnect;
 import mapper.MapperDates;
 
 @Component
-public class Mapper implements RowMapper<T>{
+public class Mapper implements RowMapper<Computer>{
 	//Service service=new Service();
 	//MapperDates mapperDates = new MapperDates();
 	
@@ -60,6 +60,12 @@ public class Mapper implements RowMapper<T>{
 		Company company = service.createCompany(id, name);
 		return company;
 		
+	}
+
+	@Override
+	public Computer mapRow(ResultSet rs, int rowNum) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	

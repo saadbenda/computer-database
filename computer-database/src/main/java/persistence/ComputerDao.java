@@ -8,6 +8,10 @@ import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import mapper.Mapper;
@@ -17,7 +21,7 @@ import model.Computer;
 @Repository
 //@Scope("prototype")
 public class ComputerDao extends Dao {
-	private static final String ADDCOMPUTER = "INSERT INTO computer (name, introduced,discontinued,company_id) VALUES(?,?,?,?)";
+	private static final String ADDCOMPUTER = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (:name, :introduced, :discontinued, :companyId);";
 	private static final String UPDATECOMPUTER = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 	private static final String DELETECOMPUTER = "DELETE FROM computer WHERE id=?";
 	// private static final String LISTCOMPUTERS = "SELECT (computer.id,
@@ -62,16 +66,54 @@ public class ComputerDao extends Dao {
 	 */
 
 	
+	
 	@Autowired
-	Mapper mapper;
+	JdbcTemplate jdbcT;
+	
+	@Autowired
+	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
 	public int addComputer(Computer cp) throws SQLException {
+		
+		/*
+		 * Parameters:
+		 * sql - the SQL query to execute
+			requiredType - the type that the result object is expected to match
+			Returns:
+			the result object of the required type, or null in case of SQL NULL
+		 */
+			
+		
+		
 		// int valueType = Types.NULL;
+		/*
 		conn = HikariConnect.getConnection().getConnect();
 		statement = conn.prepareStatement(ADDCOMPUTER);
 		statement.setObject(1, cp.getName(), Types.VARCHAR);
 		statement.setObject(2, cp.getIntroduced(), Types.DATE);
 		statement.setObject(3, cp.getDiscontinued(), Types.DATE);
+		*/
+		
+		//jdbcT.update(ADDCOMPUTER,cp.getName());//dangereux
+		
+		SqlParameterSource namedParameters = new MapSqlParameterSource()
+				.addValue("id", cp.getName(),Types.BIGINT)
+				.addValue(paramName, value)
+				.addValue();
+		
+		if (cp.getCompany() != null) {
+			namedParameters.addValue("companyId", cp.getCompany().getId(), Types.BIGINT);
+		} else {
+			statement.setNull("companyId", java.sql.Types.NULL);
+		}
+		rsI = namedParameterJdbcTemplate.queryForObject(ADDCOMPUTER, namedParameters, Integer.class);
+		return rsI;
+		
+		/*Computer computre = new Computer();
+		computer.setFirstName("James");
+		SqlParameterSource namedParameters2 = new BeanPropertySqlParameterSource(cp);
+		return namedParameterJdbcTemplate.queryForObject(SELECT_BY_ID, namedParameters2, Integer.class);*/
+		
 		/*
 		 * if (!cp.getCompany().equals(null)) {
 		 * System.out.println("company is not null in computerDao");
@@ -79,6 +121,7 @@ public class ComputerDao extends Dao {
 		 * valueType);
 		 */
 
+		/*
 		if (cp.getCompany() != null) {
 			statement.setObject(4, cp.getCompany().getId(), Types.BIGINT);
 		} else {
@@ -87,7 +130,11 @@ public class ComputerDao extends Dao {
 		rsI = statement.executeUpdate();
 		this.closeConnection(conn);
 		this.closePreparedStatement(statement);
-		return rsI;
+		
+		*/
+		
+		
+		
 	}
 
 	public int updateComputer(String name, LocalDate introduced, LocalDate discontinued, long companyId, long computerId) throws SQLException {

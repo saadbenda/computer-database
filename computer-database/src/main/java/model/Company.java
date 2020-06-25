@@ -5,7 +5,7 @@ public class Company {
 	private String name;
 	
 	
-	private Company(CompanyBuilder cb) {
+	public Company(CompanyBuilder cb) {
 		this.id=cb.idC;
 		this.name=cb.nameC;
 	}

@@ -15,8 +15,7 @@ import service.Service;
 @Component
 public class ComputerMapper implements RowMapper<Computer> {
 
-	@Autowired
-	Computer computer;
+	
 	
 	@Autowired
 	Service service;

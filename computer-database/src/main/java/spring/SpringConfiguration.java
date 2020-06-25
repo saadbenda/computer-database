@@ -55,7 +55,12 @@ public class SpringConfiguration {
 	}
 	
 	@Bean
-	public NamedParameterJdbcTemplate JdbcTemplateBean() {
+	public JdbcTemplate JdbcTemplateBean() {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSourceBean());
+        return jdbcTemplate;
+	}
+	@Bean
+	public NamedParameterJdbcTemplate NamedParameterJdbcTemplateBean() {
 		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(DataSourceBean());
         return namedParameterJdbcTemplate;
 	}

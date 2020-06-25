@@ -3,11 +3,13 @@ package persistence;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -16,6 +18,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import model.Company;
+import mapper.CompanyMapper;
 import mapper.ComputerMapper;
 import mapper.Mapper;
 
@@ -34,14 +37,17 @@ public class CompanyDao extends Dao {
 	 *         operation is a mass delete on a segmented table space.
 	 */
 
-	@Autowired
-	ComputerMapper computerMapper;
+	
 	
 	@Autowired
 	JdbcTemplate jdbcT;
 	
+	
 	@Autowired
-	NamedParameterJdbcTemplate namedJdbc;
+	Mapper mapper;
+	
+	@Autowired
+	CompanyMapper companyMapper;
 	
 	public int addCompany(Company company) throws SQLException {
 		conn = new Mysql2Connect().getConnection();
@@ -57,14 +63,26 @@ public class CompanyDao extends Dao {
 	public ArrayList<Company> getAllCompanies() throws SQLException {
 		ArrayList<Company> companyList = new ArrayList<Company>();
 		
-		SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", 1);
+		//SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", 1);
 		//SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(employee);
 		
 		/* return NamedParameterJdbcTemplate.queryForObject("SELECT FIRST_NAME FROM EMPLOYEE WHERE ID = :id", namedParameters, String.class);*/
 		 
+		/*
+		 * According to BeanPropertyRowMapper,
+
+RowMapper implementation that converts a row into a new instance of the specified mapped target class. The mapped target class must be a top-level class and it must have a default or no-arg constructor.
 		
 		
-		//JdbcTemplate  j = new JdbcTemplate();
+		companyList = (ArrayList<Company>) jdbcT.query(LISTCOMPANIES,new BeanPropertyRowMapper(Company.class));
+		
+		 */
+		
+		companyList = (ArrayList<Company>) jdbcT.query(LISTCOMPANIES,companyMapper);
+		return companyList;
+		 /***
+		  * 
+		  * JdbcTemplate  j = new JdbcTemplate();
 		 JdbcTemplate.query(LISTCOMPANIES,computerMapper);
 		 
 		
@@ -97,6 +115,8 @@ public class CompanyDao extends Dao {
 		this.closePreparedStatement(statement);
 		this.closeResultSet(rs);
 		return companyList;
+		  */
+		
 	}
 
 	public String findCompanyName(long companyId) throws SQLException {

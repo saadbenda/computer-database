@@ -16,7 +16,7 @@ public class CompanyDto {
 	public String toString() {
 		return "CompanyDto [id=" + id + ", name=" + name + "]";
 	}
-
+	
 	private CompanyDto (CompanyDtoBuilder cdb) {
 		this.id=cdb.id;
 		this.name=cdb.name;

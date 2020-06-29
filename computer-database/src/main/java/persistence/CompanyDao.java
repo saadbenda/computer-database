@@ -1,32 +1,17 @@
 package persistence;
-
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
-import java.util.List;
-
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-
 import org.springframework.stereotype.Repository;
-
 import model.Company;
 import mapper.CompanyMapper;
-import mapper.ComputerMapper;
-import mapper.Mapper;
 
 
 @Repository
 //@Scope("prototype")
-public class CompanyDao extends Dao {
-	private static final String FINDCOMPANY = "SELECT id,name FROM company WHERE id=?";
+public class CompanyDao {
+	private static final String FINDCOMPANY = "SELECT name FROM company WHERE id=:id";
 	private static final String LISTCOMPANIES = "SELECT id,name FROM company";
 	private static final String ADDCOMPANY = "INSERT INTO company (name) VALUES(?)";
 
@@ -36,108 +21,30 @@ public class CompanyDao extends Dao {
 	 *         table space. 0, if no rows are affected by the operation. -1, if the
 	 *         operation is a mass delete on a segmented table space.
 	 */
+	@Autowired
+	NamedParameterJdbcTemplate name;
 
-	
-	
-	@Autowired
-	JdbcTemplate jdbcT;
-	
-	
-	@Autowired
-	Mapper mapper;
-	
 	@Autowired
 	CompanyMapper companyMapper;
-	
-	public int addCompany(Company company) throws SQLException {
-		conn = new Mysql2Connect().getConnection();
-		statement = conn.prepareStatement(ADDCOMPANY);
-		statement.setObject(1, company.getName(), Types.VARCHAR);
-		rsI = statement.executeUpdate();
-		this.closeConnection(conn);
-		this.closePreparedStatement(statement);
-		return rsI;
-
-	}
 
 	public ArrayList<Company> getAllCompanies() throws SQLException {
 		ArrayList<Company> companyList = new ArrayList<Company>();
-		
-		//SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("id", 1);
-		//SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(employee);
-		
-		/* return NamedParameterJdbcTemplate.queryForObject("SELECT FIRST_NAME FROM EMPLOYEE WHERE ID = :id", namedParameters, String.class);*/
-		 
-		/*
-		 * According to BeanPropertyRowMapper,
-
-RowMapper implementation that converts a row into a new instance of the specified mapped target class. The mapped target class must be a top-level class and it must have a default or no-arg constructor.
-		
-		
-		companyList = (ArrayList<Company>) jdbcT.query(LISTCOMPANIES,new BeanPropertyRowMapper(Company.class));
-		
-		 */
-		
-		companyList = (ArrayList<Company>) jdbcT.query(LISTCOMPANIES,companyMapper);
+		companyList = (ArrayList<Company>) name.query(LISTCOMPANIES, companyMapper);
 		return companyList;
-		 /***
-		  * 
-		  * JdbcTemplate  j = new JdbcTemplate();
-		 JdbcTemplate.query(LISTCOMPANIES,computerMapper);
-		 
-		
-		 return namedParameterJdbcTemplate.queryForObject(
-				  "SELECT FIRST_NAME FROM EMPLOYEE WHERE ID = :id", namedParameters, String.class);
-		
-		 SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(employee);
-		 return namedParameterJdbcTemplate.queryForObject(
-		   SELECT_BY_ID, namedParameters, Integer.class);
-		 
-		 
-		 String query = "SELECT * FROM EMPLOYEE WHERE ID = ?";
-		 List<Employee> employees = jdbcTemplate.queryForObject(query, new Object[] { id }, new EmployeeRowMapper());
-		 
-		 JdbcTemplate vJdbcTemplate = new JdbcTemplate(getDataSource());
-	        int vNbrTickets = vJdbcTemplate.queryForObject(
-	            vSQL, Integer.class,
-	            pRechercheTicket.getAuteurId(),
-	            pRechercheTicket.getProjetId());
-		 
-		
-		conn = HikariConnect.getConnection().getConnect();
-		statement = conn.prepareStatement(LISTCOMPANIES);
-		rs = statement.executeQuery();
-		while (rs.next()) {
-			Company company = mapper.fromResultSetToCompany(rs);
-			companyList.add(company);
-		}
-		this.closeConnection(conn);
-		this.closePreparedStatement(statement);
-		this.closeResultSet(rs);
-		return companyList;
-		  */
-		
 	}
 
-	public String findCompanyName(long companyId) throws SQLException {
-		Company company;
-		String companyName = null;
-		conn = HikariConnect.getConnection().getConnect();
-		statement = conn.prepareStatement(FINDCOMPANY);
-		statement.setObject(1, companyId, Types.BIGINT);
-		rs = statement.executeQuery();
-		while (rs.next()) {
-			
-			company = mapper.fromResultSetToCompany(rs);
-			companyName = company.getName();
-		}
-		this.closeConnection(conn);
-		this.closePreparedStatement(statement);
-		this.closeResultSet(rs);
-		return companyName;
-	}
+	/************************************************************************************************/
 
-	/***************************************************************************/
+	/*
+	 * public int addCompany(Company company) throws SQLException { conn = new
+	 * Mysql2Connect().getConnection(); statement =
+	 * conn.prepareStatement(ADDCOMPANY); statement.setObject(1, company.getName(),
+	 * Types.VARCHAR); rsI = statement.executeUpdate(); this.closeConnection(conn);
+	 * this.closePreparedStatement(statement); return rsI;
+	 * 
+	 * }
+	 */
+
 	/*
 	 * public Optional<Long> findCompanyIdByName(String company) { long result = 0;
 	 * try { statement =

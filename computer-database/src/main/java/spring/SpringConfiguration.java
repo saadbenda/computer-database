@@ -3,6 +3,7 @@ package spring;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
 import javax.sql.DataSource;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -10,60 +11,81 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.AbstractContextLoaderInitializer;
+import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import service.Service;
+import servlets.AddComputerServlet;
+
 
 @Configuration
-@ComponentScan({ "service", "persistence", "servlets", "mapper" })
-
-public class SpringConfiguration {
-
-	private static AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext(
-			SpringConfiguration.class);
+public class SpringConfiguration implements  WebApplicationInitializer  {
+	
+/*
+	 @Override
+	 protected WebApplicationContext createRootApplicationContext() {
+	 AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
+	 rootContext.register(SpringConfiguration.class);
+	 return rootContext;
+	 } */
+	
+	
+	 @Override
+		public void onStartup(ServletContext servletContext) throws ServletException {
+			AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
+			webContext.register(SpringConfiguration.class, SpringMvcConfiguration.class);
+			webContext.setServletContext(servletContext);
+			ServletRegistration.Dynamic servlet = servletContext.addServlet("dynamicServlet", new DispatcherServlet(webContext));
+			servlet.setLoadOnStartup(1);
+			servlet.addMapping("/");
+		} 
+/*
+	private static AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext(SpringConfiguration.class);
 
 	public static AnnotationConfigApplicationContext getContext() {
 		return appContext;
-	}
-
-	/*@Bean
-	public HikariConfig hikariConfig() {
-		return new HikariConfig("/datasource.properties");
-	}
-
-	
-
-	@Bean
-	@Scope("singleton")
-	public HikariDataSource getHikariDataSource() {
-		return new HikariDataSource(hikariConfig());
 	}*/
 	
+	/*
+	 @Override
+		public void onStartup(ServletContext servletContext) throws ServletException {
+		  AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
+	        appContext.register(SpringConfiguration.class,SpringMvcConfiguration.class);
+	 
+	        // Dispatcher Servlet
+	        ServletRegistration.Dynamic dispatcher = servletContext.addServlet("SpringDispatcher",
+	                new DispatcherServlet(appContext));
+	        dispatcher.setLoadOnStartup(1);
+	        dispatcher.addMapping("/");
+	         
+	        dispatcher.setInitParameter("contextClass", appContext.getClass().getName());
+	 
+	        servletContext.addListener(new ContextLoaderListener(appContext));
+	         
+	      
+	    } */
+	        
+	        
+	        
+	        
+		
+		
 	
-	//By default, the bean name will be that of the method name
-	@Bean(destroyMethod = "close")
-	public DataSource DataSourceBean(){
-		HikariConfig hikariConfig = new HikariConfig("/datasource.properties");
-		HikariDataSource dataSource = new HikariDataSource(hikariConfig);
-	    return dataSource;
-	}
-	
-	@Bean
-	public JdbcTemplate JdbcTemplateBean() {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSourceBean());
-        return jdbcTemplate;
-	}
-	@Bean
-	public NamedParameterJdbcTemplate NamedParameterJdbcTemplateBean() {
-		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(DataSourceBean());
-        return namedParameterJdbcTemplate;
-	}
+
+
 	
 	/*
     public void onStartup(ServletContext servletContext) throws ServletException {

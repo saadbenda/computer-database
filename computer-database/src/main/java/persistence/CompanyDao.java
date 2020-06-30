@@ -14,19 +14,17 @@ public class CompanyDao {
 	private static final String FINDCOMPANY = "SELECT name FROM company WHERE id=:id";
 	private static final String LISTCOMPANIES = "SELECT id,name FROM company";
 	private static final String ADDCOMPANY = "INSERT INTO company (name) VALUES(?)";
+	private static final String DELETECOMPANY = "INSERT INTO company (name) VALUES(?)";
 
-	/***
-	 * @return A positive number, if a positive number of rows are affected by the
-	 *         operation, and the operation is not a mass delete on a segmented
-	 *         table space. 0, if no rows are affected by the operation. -1, if the
-	 *         operation is a mass delete on a segmented table space.
-	 */
+	
 	@Autowired
 	NamedParameterJdbcTemplate name;
 
 	@Autowired
 	CompanyMapper companyMapper;
 
+	
+	
 	public ArrayList<Company> getAllCompanies() throws SQLException {
 		ArrayList<Company> companyList = new ArrayList<Company>();
 		companyList = (ArrayList<Company>) name.query(LISTCOMPANIES, companyMapper);

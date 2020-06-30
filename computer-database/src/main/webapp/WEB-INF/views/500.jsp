@@ -20,8 +20,7 @@
 	<section id="main">
 		<div class="container">
 			<div class="alert alert-danger">
-				Error 500: An error has occured! <br />
-				<p>${errorMessage}</p>
+				<h2>Error 500 : ${errorMessage}</h2>
 				<p>"${stackTrace}"</p>
 			</div>
 		</div>

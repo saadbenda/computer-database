@@ -9,7 +9,8 @@ import model.Company;
 import model.Company.CompanyBuilder;
 import model.Computer;
 import dto.ComputerDto;
-import exceptions.DateNumberFormatException;
+import exceptions.CompanyIdNumberFormatException;
+
 import exceptions.DateParseException;
 import exceptions.NameEmptyException;
 import model.Computer.ComputerBuilder;
@@ -19,7 +20,7 @@ public class MapperDto {
 	@Autowired
 	MapperDates mapperDates;
 
-	public Company fromCompanyDtoToCompany(CompanyDto companyDto) throws DateNumberFormatException {
+	public Company fromCompanyDtoToCompany(CompanyDto companyDto) throws CompanyIdNumberFormatException {
 		long companyId;
 		Company company = null;
 		if (companyDto == null) {
@@ -30,7 +31,7 @@ public class MapperDto {
 			String companyName = companyDto.getName();
 			company = new CompanyBuilder().withName(companyName).withId(companyId).build();
 		}catch (NumberFormatException e) {
-			throw new DateNumberFormatException(e);
+			throw new CompanyIdNumberFormatException(e);
 		}
 		return company;
 	}

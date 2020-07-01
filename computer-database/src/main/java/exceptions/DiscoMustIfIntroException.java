@@ -6,8 +6,8 @@ public class DiscoMustIfIntroException extends Exception{
 	
 	private static final String discoMustIfIntroException= "if there is a disconinued date, there must be an introduced date";
 
-	public DiscoMustIfIntroException(Throwable e) {
-        super(discoMustIfIntroException, e);
+	public DiscoMustIfIntroException() {
+        super(discoMustIfIntroException);
     }
 
 }

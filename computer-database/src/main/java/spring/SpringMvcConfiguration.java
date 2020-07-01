@@ -53,19 +53,6 @@ public class SpringMvcConfiguration implements WebMvcConfigurer {
 		registry.addResourceHandler("/js/**").addResourceLocations("/js/").setCachePeriod(31556926);
 	}
 
-	@Override
-	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-		configurer.enable();
-	}
-
-	/*
-	 * @Bean public ResourceBundleMessageSource messageSourceBean() {
-	 * ResourceBundleMessageSource source = new ResourceBundleMessageSource();
-	 * source.setBasenames("classpath:labels/messages");
-	 * source.setUseCodeAsDefaultMessage(true); source.setDefaultEncoding("UTF-8");
-	 * return source; }
-	 */
-
 	@Bean("messageSource")
 	public MessageSource messageSource() {
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
@@ -77,14 +64,9 @@ public class SpringMvcConfiguration implements WebMvcConfigurer {
 
 	@Bean
 	public LocaleResolver localeResolver() {
-		CookieLocaleResolver resolver = new CookieLocaleResolver();
-		resolver.setDefaultLocale(new Locale("en"));
-		resolver.setCookieName("langCookie");
-		resolver.setCookieMaxAge(4800);
-		
-		
-		
-		return resolver;
+		final SessionLocaleResolver localeResolver = new SessionLocaleResolver();
+	    localeResolver.setDefaultLocale(new Locale("en", "US"));
+	    return localeResolver;
 	}
 
 	@Override
@@ -93,33 +75,6 @@ public class SpringMvcConfiguration implements WebMvcConfigurer {
 		localeChangeInterceptor.setParamName("lang");
 		registry.addInterceptor(localeChangeInterceptor);
 	}
-
-	/*
-	 * @Bean public MessageSource messageSource() {
-	 * ReloadableResourceBundleMessageSource messageSource = new
-	 * ReloadableResourceBundleMessageSource();
-	 * messageSource.setBasename("labels/messages");
-	 * messageSource.setDefaultEncoding("UTF-8"); return messageSource; }
-	 */
-
-	/*
-	 * @Bean public LocaleResolver localeResolver() { SessionLocaleResolver
-	 * localeResolver = new SessionLocaleResolver();
-	 * localeResolver.setDefaultLocale(new Locale("en")); return localeResolver; }
-	 */
-
-	/*
-	 * @Bean public LocaleResolver localeResolver(){ CookieLocaleResolver resolver =
-	 * new CookieLocaleResolver(); resolver.setDefaultLocale(new Locale("en"));
-	 * resolver.setCookieName("myLocaleCookie"); resolver.setCookieMaxAge(4800);
-	 * return resolver; }
-	 */
-
-	/*
-	 * @Override public void addInterceptors(InterceptorRegistry registry) {
-	 * LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
-	 * interceptor.setParamName("lang"); registry.addInterceptor(interceptor); }
-	 */
 
 	@Bean
 	public DataSource DataSourceBean() {

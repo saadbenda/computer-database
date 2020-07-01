@@ -64,7 +64,7 @@ public class AddComputerController {
 		
 			ArrayList<Company> companies = service.getCompanies();
 			modelMap.put("companies", companies);
-			modelMap.addAttribute("lang",lang);	
+			modelMap.addAttribute("lang",lang);				
 			return ADDCOMPUTER;
 	}
 
@@ -79,48 +79,15 @@ public class AddComputerController {
 		// DTO
 		CompanyDto companyDto = new CompanyDtoBuilder().withId(companyId).build();
 		ComputerDto computerDto = new ComputerDtoBuilder().withName(computerName).IntroducedIn(intro)
-				.DiscontinuedIn(disco).withCompanyDto(companyDto).build();
-			
+				.DiscontinuedIn(disco).withCompanyDto(companyDto).build();		
 			// Mapping
 			Computer computer = mapperDto.fromComputerDtoToComputer(computerDto);
 			// Validation
 			validation.createComputer(computer);
 			// Service
-			service.addComputer(computer);
+			service.addComputer(computer);			
 			
 			return DASHBOARD;
-
-//		} catch (NumberFormatException e) {
-//			modelMap.addAttribute("errorMessage", e.getMessage());
-//			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
-//			e.printStackTrace();
-//			return ERROR400;
-//			
-//		} catch (ParseException e) {
-//			modelMap.addAttribute("errorMessage", e.getMessage());
-//			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
-//			e.printStackTrace();
-//			return ERROR400;
-//
-//		} catch (SQLException e) {
-//			modelMap.addAttribute("errorMessage", e.getMessage());
-//			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
-//			e.printStackTrace();
-//			return ERROR500;
-//			
-//		} catch (NullPointerException e) {
-//			modelMap.addAttribute("errorMessage", e.getMessage());
-//			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
-//			e.printStackTrace();
-//			return ERROR500;
-//			
-//		} catch (Exception e) {
-//			modelMap.addAttribute("errorMessage", e.getMessage());
-//			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
-//			e.printStackTrace();
-//			return ERROR500;
-//			
-//		}
 
 	}
 

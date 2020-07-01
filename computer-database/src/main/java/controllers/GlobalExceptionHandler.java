@@ -20,27 +20,58 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import exceptions.After1970Exception;
+import exceptions.Before2038Exception;
+import exceptions.CompaniesNotFoundException;
+import exceptions.DateIntroDiscoException;
+import exceptions.DateNullException;
+import exceptions.DateParseException;
+import exceptions.DiscoMustIfIntroException;
+import exceptions.NameEmptyException;
+import exceptions.RowMapException;
+import exceptions.UpdateException;
+
 @ControllerAdvice
-@EnableWebMvc
-
 public class GlobalExceptionHandler{
-
+	private static final String ERROR400 = "400";
 	private static final String ERROR403 = "403";
 	private  static final String ERROR404 = "404";
 	private static final String ERROR500 = "500";
 
-	@ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ModelAndView handleNoHandlerFound(Exception e, WebRequest request) {
-        ModelAndView modelAndView = new ModelAndView();
-	    modelAndView.addObject("errorMessage", e.getMessage());
-	    modelAndView.addObject("stackTrace", ExceptionUtils.getStackTrace(e));    
-	    modelAndView.setViewName(ERROR404);
-	    return modelAndView;
+	@ExceptionHandler({RowMapException.class, CompaniesNotFoundException.class, UpdateException.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ModelAndView handleInternalServerError(Exception e, WebRequest request) {
+		return display(e, ERROR500);
     }
 	
 	
+	/*@ExceptionHandler(RowMapException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ModelAndView handForbidden(Exception e, WebRequest request) {
+		return display(e, ERROR403);
+    }*/
 	
+	@ExceptionHandler({After1970Exception.class, Before2038Exception.class, DateIntroDiscoException.class, DateNullException.class, DateParseException.class, DiscoMustIfIntroException.class, NameEmptyException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ModelAndView handleBadRequest(Exception e, WebRequest request) {
+		return display(e, ERROR400);
+	    
+    }
+	
+	@ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ModelAndView handleNotFound(Exception e, WebRequest request) {
+		return display(e, ERROR404); 
+    }
+	
+	public ModelAndView display(Exception e, String errorPage) {
+		ModelAndView modelAndView = new ModelAndView();
+	    modelAndView.addObject("errorMessage", e.getMessage());
+	    modelAndView.addObject("stackTrace", ExceptionUtils.getStackTrace(e));    
+	    modelAndView.setViewName(errorPage);
+	    e.printStackTrace();
+	    return modelAndView;
+	}
 	
 	
 	/*

@@ -22,6 +22,7 @@ public class CompanyDto {
 		this.name=cdb.name;
 	}
 	
+	
 	public static class CompanyDtoBuilder {
 		private String id;
 		private String name;

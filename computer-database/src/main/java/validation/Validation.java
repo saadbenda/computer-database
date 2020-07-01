@@ -6,6 +6,10 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import exceptions.After1970Exception;
+import exceptions.Before2038Exception;
+import exceptions.DateIntroDiscoException;
+import exceptions.DiscoMustIfIntroException;
 import mapper.MapperDates;
 
 import model.Computer;
@@ -16,7 +20,7 @@ public class Validation {
 	@Autowired
 	MapperDates mapperDates;
 
-	public void createComputer(Computer computer) throws Exception {
+	public void createComputer(Computer computer) throws DiscoMustIfIntroException, After1970Exception, Before2038Exception, DateIntroDiscoException  {
 		LocalDate intro = computer.getIntroduced();
 		LocalDate disco = computer.getDiscontinued();
 		this.discoMustIfIntro(intro, disco);
@@ -32,27 +36,27 @@ public class Validation {
 		}
 	}
 
-	public void discoMustIfIntro(LocalDate intro, LocalDate disco) throws Exception {
+	public void discoMustIfIntro(LocalDate intro, LocalDate disco) throws DiscoMustIfIntroException  {
 		if (disco != null && intro == null) {
-			throw new Exception("if discontinued date present there must be an introduced date");
+			throw new DiscoMustIfIntroException();
 		}
 	}
 
-	public void after1970before2038(LocalDate date) throws Exception {
+	public void after1970before2038(LocalDate date) throws After1970Exception, Before2038Exception  {
 		LocalDate after1970 = LocalDate.parse("1970-01-01");
 		LocalDate before2038 = LocalDate.parse("2038-01-19");
 		if (date.compareTo(after1970) <= 0) {
-			throw new Exception("the date must be strictly greater than 1970-01-01");
+			throw new After1970Exception();
 		}
 		if (date.compareTo(before2038) >= 0) {
-			throw new Exception("the date must be strictly less than 2038-01-19");
+			throw new Before2038Exception();
 		}
 
 	}
 
-	public void dateIntroDisco(LocalDate intro, LocalDate disco) throws Exception {
+	public void dateIntroDisco(LocalDate intro, LocalDate disco) throws DateIntroDiscoException  {
 		if (intro.compareTo(disco) > 0) {
-			throw new Exception("introdudction date must be less than or equal to the discontinued date");
+			throw new DateIntroDiscoException();
 		}
 	}
 

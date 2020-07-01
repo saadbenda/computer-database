@@ -1,9 +1,14 @@
 package persistence;
-import java.sql.SQLException;
 import java.util.ArrayList;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import exceptions.CompaniesNotFoundException;
+import exceptions.UpdateException;
 import model.Company;
 import mapper.CompanyMapper;
 
@@ -25,9 +30,13 @@ public class CompanyDao {
 
 	
 	
-	public ArrayList<Company> getAllCompanies() throws SQLException {
+	public ArrayList<Company> getAllCompanies() throws UpdateException {
 		ArrayList<Company> companyList = new ArrayList<Company>();
-		companyList = (ArrayList<Company>) name.query(LISTCOMPANIES, companyMapper);
+		try {
+		companyList = (ArrayList<Company>) name.query(LISTCOMPANIES, companyMapper);	
+		} catch (DataAccessException e) {
+			throw new UpdateException(e);
+		}
 		return companyList;
 	}
 

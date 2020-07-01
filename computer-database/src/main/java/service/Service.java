@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import dto.ComputerDto;
 import dto.ComputerDto.ComputerDtoBuilder;
+import exceptions.CompaniesNotFoundException;
+import exceptions.UpdateException;
 import mapper.MapperDto;
 import ui.Cli;
 import model.Company;
@@ -46,14 +48,33 @@ public class Service {
 	public void quit() {
 		Cli.scan.close();
 	}
-	public int addComputer(Computer computer) throws SQLException {
+	public int addComputer(Computer computer) throws UpdateException {
 		int error = computerDao.addComputer(computer);
 		return error;
 	}
+	
 
-	public int deleteComputer(long computerId) throws SQLException {
+	public ArrayList<Company> getCompanies() throws CompaniesNotFoundException {
+		ArrayList<Company> companyList = companyDao.getAllCompanies();
+		return companyList;
+	}
+	
+
+	public int deleteComputer(long computerId) throws SQLException{
 		int error = computerDao.deleteComputer(computerId);
 		return error;
+	}
+	
+	public Company createCompany(long id, String name) {
+	Company company = new CompanyBuilder().withId(id).withName(name).build();
+	return company;
+	}
+	
+	public Computer createComputer(long computerId, String name, LocalDate introduced, LocalDate discontinued, long companyId, String companyName){
+	Company company = new CompanyBuilder().withId(computerId).withName(companyName).withId(companyId).build();	
+	Computer computer =  new Computer.ComputerBuilder().withName(name).IntroducedIn(introduced)
+			.DiscontinuedIn(discontinued).withCompany(company).build();
+	return computer;
 	}
 
 	/*public int updateComputer(String name, String introduced, String discontinued, String companyId, String computerId)
@@ -68,66 +89,53 @@ public class Service {
 		return error;
 	}*/
 
-	public Company createCompany(long id, String name) {
-		Company company = new CompanyBuilder().withId(id).withName(name).build();
-		return company;
-	}
 
-	public ArrayList<Company> getCompanies() throws SQLException {
-		ArrayList<Company> companyList = companyDao.getAllCompanies();
-		return companyList;
-	}
-	
-public Computer createComputer(long computerId, String name, LocalDate introduced, LocalDate discontinued, long companyId, String companyName){
-		Company company = new CompanyBuilder().withId(computerId).withName(companyName).withId(companyId).build();	
-		Computer computer =  new Computer.ComputerBuilder().withName(name).IntroducedIn(introduced)
-				.DiscontinuedIn(discontinued).withCompany(company).build();
-		return computer;
-	}
+//
 
-	public ArrayList<Computer> getComputers() throws Exception {
-		ArrayList<Computer> computerList = computerDao.getAllComputers();
-		return computerList;
-	}
-
-	public ArrayList<Computer> getComputers(long limit, long offset) throws Exception {
-		ArrayList<Computer> computerList = computerDao.getAllComputers(limit, offset);
-		return computerList;
-	}
-
-	public Computer getComputer(long id) throws Exception {
-		Computer computer = computerDao.getComputer(id);
-		return computer;
-	}
-
-	public String findCompanyName(long companyId) throws SQLException {
-		String cpany = companyDao.findCompanyName(companyId);
-		return cpany;
-	}
-	/*
-	 * public List<Computer> filterComputer(String computerName) throws Exception {
-	 * List<Computer> computers = this.getComputers(); List<Computer> cputers =
-	 * computers.stream().filter(computer->computer.getName().equals(computerName)).
-	 * collect(Collectors.toList()); return cputers; }
-	 */
-
-	public long countComputers() throws SQLException {
-
-		return computerDao.countComputers();
-	}
-
-	public ArrayList<Computer> searchComputer(String search) throws Exception {
-
-		ArrayList<Computer> computers = computerDao.searchComputer(search);
-		return computers;
-
-	}
-
-	public ArrayList<Computer> orderBy(String orderBy) throws Exception {
-
-		ArrayList<Computer> computers = computerDao.orderBy(orderBy, orderBy, orderBy);
-		return computers;
-	}
+//
+//	public ArrayList<Computer> getComputers() {
+//		ArrayList<Computer> computerList = computerDao.getAllComputers();
+//		return computerList;
+//	}
+//
+//	public ArrayList<Computer> getComputers(long limit, long offset)  {
+//		ArrayList<Computer> computerList = computerDao.getAllComputers(limit, offset);
+//		return computerList;
+//	}
+//
+//	public Computer getComputer(long id)  {
+//		Computer computer = computerDao.getComputer(id);
+//		return computer;
+//	}
+//
+//	public String findCompanyName(long companyId)  {
+//		String cpany = companyDao.findCompanyName(companyId);
+//		return cpany;
+//	}
+//	
+//	  public List<Computer> filterComputer(String computerName) throws Exception {
+//	  List<Computer> computers = this.getComputers(); List<Computer> cputers =
+//	  computers.stream().filter(computer->computer.getName().equals(computerName)).
+//	  collect(Collectors.toList()); return cputers; }
+//	 
+//
+//	public long countComputers() throws SQLException {
+//
+//		return computerDao.countComputers();
+//	}
+//
+//	public ArrayList<Computer> searchComputer(String search) {
+//
+//		ArrayList<Computer> computers = computerDao.searchComputer(search);
+//		return computers;
+//
+//	}
+//
+//	public ArrayList<Computer> orderBy(String orderBy){
+//
+//		ArrayList<Computer> computers = computerDao.orderBy(orderBy, orderBy, orderBy);
+//		return computers;
+//	}
 
 	/*********************************************************************************************/
 

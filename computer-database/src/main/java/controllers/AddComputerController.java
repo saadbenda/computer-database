@@ -22,6 +22,14 @@ import dto.CompanyDto;
 import dto.ComputerDto;
 import dto.CompanyDto.CompanyDtoBuilder;
 import dto.ComputerDto.ComputerDtoBuilder;
+import exceptions.After1970Exception;
+import exceptions.Before2038Exception;
+import exceptions.CompaniesNotFoundException;
+import exceptions.DateIntroDiscoException;
+import exceptions.DateParseException;
+import exceptions.DiscoMustIfIntroException;
+import exceptions.NameEmptyException;
+import exceptions.RowMapException;
 import mapper.MapperDto;
 import model.Company;
 import model.Computer;
@@ -52,19 +60,12 @@ public class AddComputerController {
 	public static final String ERROR500 = "500";
 	
 	@GetMapping
-	public String doGet(@RequestParam(defaultValue = "en", name = "lang", required = false) String lang, ModelMap modelMap) {
-		try {		
+	public String doGet(@RequestParam(defaultValue = "en", name = "lang", required = false) String lang, ModelMap modelMap) throws CompaniesNotFoundException, RowMapException {
+		
 			ArrayList<Company> companies = service.getCompanies();
 			modelMap.put("companies", companies);
-			modelMap.addAttribute("lang",lang);
+			modelMap.addAttribute("lang",lang);	
 			return ADDCOMPUTER;
-		} catch (SQLException e) {
-			modelMap.addAttribute("errorMessage", e.getMessage());
-			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
-			e.printStackTrace();
-			return ERROR500;
-		}
-
 	}
 
 	@PostMapping	
@@ -73,53 +74,53 @@ public class AddComputerController {
 			@RequestParam(name = "introduced", required = false) String intro,
 			@RequestParam(name = "discontinued", required = false) String disco,
 			@RequestParam(name = "companyId") String companyId, 
-			@RequestParam(name = "language", required=false) String language, 
-			ModelMap modelMap) {
-
+			ModelMap modelMap) throws DateParseException, NameEmptyException, DiscoMustIfIntroException, After1970Exception, Before2038Exception, DateIntroDiscoException {
+		
 		// DTO
 		CompanyDto companyDto = new CompanyDtoBuilder().withId(companyId).build();
 		ComputerDto computerDto = new ComputerDtoBuilder().withName(computerName).IntroducedIn(intro)
 				.DiscontinuedIn(disco).withCompanyDto(companyDto).build();
-		try {
+			
 			// Mapping
 			Computer computer = mapperDto.fromComputerDtoToComputer(computerDto);
 			// Validation
 			validation.createComputer(computer);
 			// Service
 			service.addComputer(computer);
+			
+			return DASHBOARD;
 
-		} catch (NumberFormatException e) {
-			modelMap.addAttribute("errorMessage", e.getMessage());
-			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
-			e.printStackTrace();
-			return ERROR400;
-			
-		} catch (ParseException e) {
-			modelMap.addAttribute("errorMessage", e.getMessage());
-			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
-			e.printStackTrace();
-			return ERROR400;
-
-		} catch (SQLException e) {
-			modelMap.addAttribute("errorMessage", e.getMessage());
-			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
-			e.printStackTrace();
-			return ERROR500;
-			
-		} catch (NullPointerException e) {
-			modelMap.addAttribute("errorMessage", e.getMessage());
-			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
-			e.printStackTrace();
-			return ERROR500;
-			
-		} catch (Exception e) {
-			modelMap.addAttribute("errorMessage", e.getMessage());
-			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
-			e.printStackTrace();
-			return ERROR500;
-			
-		}
-		return DASHBOARD;
+//		} catch (NumberFormatException e) {
+//			modelMap.addAttribute("errorMessage", e.getMessage());
+//			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
+//			e.printStackTrace();
+//			return ERROR400;
+//			
+//		} catch (ParseException e) {
+//			modelMap.addAttribute("errorMessage", e.getMessage());
+//			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
+//			e.printStackTrace();
+//			return ERROR400;
+//
+//		} catch (SQLException e) {
+//			modelMap.addAttribute("errorMessage", e.getMessage());
+//			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
+//			e.printStackTrace();
+//			return ERROR500;
+//			
+//		} catch (NullPointerException e) {
+//			modelMap.addAttribute("errorMessage", e.getMessage());
+//			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
+//			e.printStackTrace();
+//			return ERROR500;
+//			
+//		} catch (Exception e) {
+//			modelMap.addAttribute("errorMessage", e.getMessage());
+//			modelMap.addAttribute("stackTrace", ExceptionUtils.getStackTrace(e));
+//			e.printStackTrace();
+//			return ERROR500;
+//			
+//		}
 
 	}
 

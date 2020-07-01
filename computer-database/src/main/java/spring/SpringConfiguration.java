@@ -17,8 +17,9 @@ public class SpringConfiguration implements WebApplicationInitializer {
 		AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
 		webContext.register(SpringConfiguration.class, SpringMvcConfiguration.class);
 		webContext.setServletContext(servletContext);
-		ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcherServlet",
-				new DispatcherServlet(webContext));
+		DispatcherServlet dispatcherServlet = new DispatcherServlet(webContext);
+		ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcherServlet",dispatcherServlet);
+		//dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
 		servlet.setLoadOnStartup(1);
 		servlet.addMapping("/");
 	}

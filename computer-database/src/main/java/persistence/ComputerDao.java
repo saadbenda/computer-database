@@ -6,16 +6,18 @@ import java.sql.Types;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
-import mapper.Mapper;
-
+import exceptions.CompaniesNotFoundException;
+import exceptions.UpdateException;
 import model.Computer;
 
 @Repository
@@ -34,7 +36,7 @@ public class ComputerDao {
 	@Autowired
 	NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-	public int addComputer(Computer cp) throws SQLException {
+	public int addComputer(Computer cp)  throws CompaniesNotFoundException {
 		int rsI;
 		Long companyId = null;
 		MapSqlParameterSource namedParameters = new MapSqlParameterSource()
@@ -46,27 +48,31 @@ public class ComputerDao {
 		namedParameters.addValue("companyId", companyId);
 		// rsI = namedParameterJdbcTemplate.queryForObject(ADDCOMPUTER, namedParameters,
 		// Integer.class);
+		try {
 		rsI = namedParameterJdbcTemplate.update(ADDCOMPUTER, namedParameters);
+		} catch(DataAccessException e) {
+			throw new CompaniesNotFoundException(e);
+		}
 		return rsI;
 
 	}
 
-	public int updateComputer(String name, LocalDate introduced, LocalDate discontinued, long companyId,
-			long computerId) throws SQLException {
-		conn = new Mysql2Connect().getConnection();
-		statement = conn.prepareStatement(UPDATECOMPUTER);
-		statement.setObject(1, name, Types.VARCHAR);
-		// Timestamp timestamp = Timestamp.valueOf(introduced.atStartOfDay());
-		// System.out.println("timestamp "+timestamp);
-		statement.setObject(2, introduced, Types.DATE);
-		statement.setObject(3, discontinued, Types.DATE);
-		statement.setObject(4, companyId, java.sql.Types.INTEGER);// can be null
-		statement.setObject(5, computerId, Types.BIGINT);
-		rsI = statement.executeUpdate();
-		this.closeConnection(conn);
-		this.closePreparedStatement(statement);
-		return rsI;
-	}
+//	public int updateComputer(String name, LocalDate introduced, LocalDate discontinued, long companyId,
+//			long computerId) throws SQLException {
+//		conn = new Mysql2Connect().getConnection();
+//		statement = conn.prepareStatement(UPDATECOMPUTER);
+//		statement.setObject(1, name, Types.VARCHAR);
+//		// Timestamp timestamp = Timestamp.valueOf(introduced.atStartOfDay());
+//		// System.out.println("timestamp "+timestamp);
+//		statement.setObject(2, introduced, Types.DATE);
+//		statement.setObject(3, discontinued, Types.DATE);
+//		statement.setObject(4, companyId, java.sql.Types.INTEGER);// can be null
+//		statement.setObject(5, computerId, Types.BIGINT);
+//		rsI = statement.executeUpdate();
+//		this.closeConnection(conn);
+//		this.closePreparedStatement(statement);
+//		return rsI;
+//	}
 
 	public int deleteComputer(long id) throws SQLException {
 		/*
@@ -105,28 +111,28 @@ public class ComputerDao {
 		 */
 		return null;
 	}
-
-	public long countComputers() throws SQLException {
-
-	}
-
-	public Computer getComputer(long id) throws Exception {
-
-		Computer computer = null;
-		conn = new Mysql2Connect().getConnection();
-		statement = conn.prepareStatement(GETCOMPUTER);
-		statement.setObject(1, id, Types.BIGINT);
-		rs = statement.executeQuery();
-		// System.out.println("rs "+rs.getString("computer.name"));
-		if (rs.next()) {
-			computer = mapper.fromResultSetToComputer(rs);
-		}
-		this.closeConnection(conn);
-		this.closePreparedStatement(statement);
-		this.closeResultSet(rs);
-		return computer;
-
-	}
+//
+//	public long countComputers() throws SQLException {
+//
+//	}
+//
+//	public Computer getComputer(long id) throws Exception {
+//
+//		Computer computer = null;
+//		conn = new Mysql2Connect().getConnection();
+//		statement = conn.prepareStatement(GETCOMPUTER);
+//		statement.setObject(1, id, Types.BIGINT);
+//		rs = statement.executeQuery();
+//		// System.out.println("rs "+rs.getString("computer.name"));
+//		if (rs.next()) {
+//			computer = mapper.fromResultSetToComputer(rs);
+//		}
+//		this.closeConnection(conn);
+//		this.closePreparedStatement(statement);
+//		this.closeResultSet(rs);
+//		return computer;
+//
+//	}
 
 	public ArrayList<Computer> searchComputer(String search) throws Exception {
 		/*

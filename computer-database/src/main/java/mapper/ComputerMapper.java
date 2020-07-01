@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+
+import exceptions.RowMapException;
 import model.Computer;
 import service.Service;
 
@@ -22,7 +24,9 @@ public class ComputerMapper implements RowMapper<Computer> {
 	MapperDates mapperDates;
 
 	@Override
-	public Computer mapRow(ResultSet rs, int rowNum) throws SQLException  {
+	public Computer mapRow(ResultSet rs, int rowNum)  throws RowMapException {
+		Computer computer = null;
+		try {
 		long companyId = rs.getLong("company.id");
 		String companyName = rs.getString("company.name");
 		long computerId = rs.getLong("computer.id");
@@ -31,8 +35,12 @@ public class ComputerMapper implements RowMapper<Computer> {
 		LocalDate introduced = mapperDates.fromDateToLocalDate(intro);
 		Date disco = rs.getDate("discontinued");
 		LocalDate discontinued = mapperDates.fromDateToLocalDate(disco);
-		Computer computer = service.createComputer(computerId, computerName, introduced, discontinued, companyId, companyName);
+		computer = service.createComputer(computerId, computerName, introduced, discontinued, companyId, companyName);	
+		} catch(SQLException e) {
+			throw new RowMapException(e);
+		}
 		return computer;
+		
 		
 	}
 

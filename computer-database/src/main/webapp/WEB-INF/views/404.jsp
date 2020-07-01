@@ -18,7 +18,7 @@
     <section id="main">
         <div class="container">
             <div class="alert alert-danger">
-                <h2>Error 500 : ${errorMessage}</h2>
+                <h2>Error 404 : ${errorMessage}</h2>
 				<p>"${stackTrace}"</p>
             </div>
         </div>

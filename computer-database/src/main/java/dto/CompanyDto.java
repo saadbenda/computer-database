@@ -1,13 +1,22 @@
 package dto;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class CompanyDto {
+	@NotNull
+	@Size(min=1, max=20)
 	private String id;
+	
+	@NotNull
+	@Size(min=1, max=255)
 	private String name;
 	
 	public String getId() {
 		return this.id;
 	}
 
+	
 	public String getName() {
 		return this.name;
 	}

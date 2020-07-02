@@ -44,7 +44,7 @@
 								<label for="computerName"><spring:message code="computerName" /></label> <span
 									class="error"><spring:message code="error.fieldRequired"/></span> <input type="text"
 									class="form-control" id="computerName"
-									placeholder="Computer name" name="computerName" required>
+									placeholder="Computer name" name="computerName">
 							</div>
 							<div class="form-group">
 								<label for="introduced"><spring:message code="introduced"/></label> <span

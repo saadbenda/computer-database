@@ -7,7 +7,7 @@ var after = '2038-01-19 03:14:07+00:00';
 					var input=$(this);
 					var is_name=input.val();
 					if(is_name){input.removeClass("invalid").addClass("valid");}
-					else{input.removeClass("valid").addClass("invalid");}
+					else{input.removeClass("valid").addClass("invalid");$("#computerName").prop('required',true);}
 				});
 
 				$('#introduced').on('input', function() {

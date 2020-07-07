@@ -3,6 +3,9 @@ package dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class CompanyDto {
 	@NotNull
 	@Size(min=1, max=20)
@@ -11,6 +14,8 @@ public class CompanyDto {
 	@NotNull
 	@Size(min=1, max=255)
 	private String name;
+	
+	public CompanyDto() {}
 	
 	public String getId() {
 		return this.id;

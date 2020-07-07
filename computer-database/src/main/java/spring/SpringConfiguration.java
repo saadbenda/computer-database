@@ -9,13 +9,14 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 
 
+
 @Configuration
 public class SpringConfiguration implements WebApplicationInitializer {
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
 		AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
-		webContext.register(SpringConfiguration.class, SpringMvcConfiguration.class, JpaConfig.class);
+		webContext.register(SpringConfiguration.class, SpringMvcConfiguration.class);
 		webContext.setServletContext(servletContext);
 		DispatcherServlet dispatcherServlet = new DispatcherServlet(webContext);
 		ServletRegistration.Dynamic servlet = servletContext.addServlet("dispatcherServlet",dispatcherServlet);

@@ -1,6 +1,6 @@
 package exceptions;
 
-import org.apache.commons.lang3.exception.ExceptionUtils;
+
 import org.springframework.dao.DataAccessException;
 
 public class UpdateException extends DataAccessException{

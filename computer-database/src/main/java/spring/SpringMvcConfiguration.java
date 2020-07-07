@@ -1,7 +1,10 @@
 package spring;
 
+import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.springframework.context.MessageSource;
@@ -10,8 +13,18 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.Ordered;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -31,13 +44,75 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @EnableWebMvc
 @Configuration
-@ComponentScan({ "service", "persistence", "mapper", "validation", "controllers" })
+@EnableJpaRepositories({ "service", "persistence", "mapper", "validation", "controllers", "model" })
+@ComponentScan({ "service", "persistence", "mapper", "validation", "controllers","model" })
 public class SpringMvcConfiguration implements WebMvcConfigurer {
 	
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/").setViewName("addComputer");//fix me !
+		registry.addViewController("/").setViewName("/dashboard");
+		registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
 	}
+	
+	
+	/*
+	@Bean 
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+		vendorAdapter.setShowSql(false);
+		vendorAdapter.setGenerateDdl(true);
+		
+
+        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+        factory.setJpaVendorAdapter(vendorAdapter);
+        factory.setPackagesToScan("model");
+        factory.setDataSource(dataSourceBean());
+        Properties jpaProperties = new Properties();
+        jpaProperties.setProperty("hibernate.hbm2ddl.auto", "update");
+        factory.setJpaProperties(jpaProperties);
+        return factory;
+		}
+	
+	@Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+
+      JpaTransactionManager txManager = new JpaTransactionManager();
+      txManager.setEntityManagerFactory(entityManagerFactory);
+      return txManager;
+    }
+    */
+	  @Bean
+	    public PlatformTransactionManager transactionManager() {
+	        
+	        JpaTransactionManager transactionManager = new JpaTransactionManager();
+	        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+	        return transactionManager;
+	        
+	    }
+	    @Bean
+	    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+	        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+	        em.setDataSource(dataSourceBean());
+	        em.setPackagesToScan(new String[] { "model" });
+	        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+	        em.setJpaVendorAdapter(vendorAdapter);
+	        em.setJpaProperties(additionalProperties());
+	        return em;
+	    }
+	    @Bean
+	    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+	        
+	        return new PersistenceExceptionTranslationPostProcessor();
+	    }
+
+	    Properties additionalProperties() {
+
+	        Properties properties = new Properties();
+	        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+	        properties.setProperty("hibernate.show_sql", "true");
+
+	        return properties;
+	    }
 	
 	/*
 	@Bean
@@ -83,23 +158,25 @@ public class SpringMvcConfiguration implements WebMvcConfigurer {
 		localeChangeInterceptor.setParamName("lang");
 		registry.addInterceptor(localeChangeInterceptor);
 	}
+	
+	 
 
 	@Bean
-	public DataSource DataSourceBean() {
+	public DataSource dataSourceBean() {
 		HikariConfig hikariConfig = new HikariConfig("/datasource.properties");
 		HikariDataSource dataSource = new HikariDataSource(hikariConfig);
 		return dataSource;
 	}
 
 	@Bean
-	public JdbcTemplate JdbcTemplateBean() {
-		JdbcTemplate jdbcTemplate = new JdbcTemplate(DataSourceBean());
+	public JdbcTemplate jdbcTemplateBean() {
+		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSourceBean());
 		return jdbcTemplate;
 	}
 
 	@Bean
-	public NamedParameterJdbcTemplate NamedParameterJdbcTemplateBean() {
-		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(DataSourceBean());
+	public NamedParameterJdbcTemplate namedParameterJdbcTemplateBean() {
+		NamedParameterJdbcTemplate namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSourceBean());
 		return namedParameterJdbcTemplate;
 	}
 }

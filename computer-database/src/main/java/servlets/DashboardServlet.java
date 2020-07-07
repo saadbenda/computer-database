@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.web.bind.annotation.ModelAttribute;
+
 import dto.ComputerDto;
 import mapper.MapperDto;
 import model.Company;
@@ -101,7 +103,7 @@ public class DashboardServlet extends HttpServlet {
 		request.getRequestDispatcher(DASHBOARD).forward(request, response);
 
 	}
-
+	@ModelAttribute(name="computer")
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ArrayList<Computer> computers = null;
 		Service service = new Service();

@@ -1,29 +1,31 @@
 package dto;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 
 public class ComputerDto {
-	
+
 	@NotNull
-	@Size(min=1, max=20)
+	@Size(min = 1, max = 20)
 	private String id;
 	@NotBlank
 	@NotNull
-	@Size(min=1, max=255)
+	@Size(min = 1, max = 255)
 	private String name;
-	@Pattern(regexp = "?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))", message="date must follow this pattern yyyy-mm-dd")
 	private String introduced;
-	@Pattern(regexp = "?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))", message="date must follow this pattern yyyy-mm-dd")
 	private String discontinued;
 	private CompanyDto companyDto;
-	
-	public ComputerDto() {}
+
+	public ComputerDto() {
+	}
 
 	private ComputerDto(ComputerDtoBuilder cdb) {
 		this.id = cdb.id;
@@ -32,6 +34,30 @@ public class ComputerDto {
 		this.discontinued = cdb.discontinued;
 		this.companyDto = cdb.companyDto;
 
+	}
+
+	public void setCompany(CompanyDto companyDto2) {
+		this.companyDto= companyDto2;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setIntroduced(String introduced) {
+		this.introduced = introduced;
+	}
+
+	public void setDiscontinued(String discontinued) {
+		this.discontinued = discontinued;
+	}
+
+	public void setCompanyDto(CompanyDto companyDto) {
+		this.companyDto = companyDto;
 	}
 
 	public String getId() {
@@ -101,5 +127,6 @@ public class ComputerDto {
 		}
 
 	}
+
 
 }

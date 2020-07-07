@@ -12,6 +12,10 @@
 
 </head>
 <body>
+<% Logger logger= LoggerFactory.getLogger(this.getClass().getName());%>
+<% Date dt = new Date();
+logger.info(dt.toString());
+logger.info("This is Guru Logging debugger"); %>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="${dashboard}"><spring:message code="home"/></a>
@@ -23,7 +27,7 @@
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<h1><spring:message code="title.addComputer"/></h1>
 					
-					<form action="${addComputer}" method="GET" id="langForm">
+					<form action="#" method="GET" id="langForm">
 						<input type="radio" name="lang" value="en"
 							class="btn btn-default"
 							onclick="$(this).closest('form').submit();"
@@ -37,17 +41,16 @@
 							<img src="img/fr.png">
 					</form>
 
-					<form action="${addComputer}" method="POST" id="addComputer"
-						name="addComputer">
+					<form:form action="${addComputer}" method="POST" id="addComputer" name="addComputer" modelAttribute="computer">
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName"><spring:message code="computerName" /></label> <span
-									class="error"><spring:message code="error.fieldRequired"/></span> <input type="text"
+								<form:label path="name" for="computerName"><spring:message code="computerName" /></form:label> <span
+									class="error"><spring:message code="error.fieldRequired"/></span> <form:input type="text"
 									class="form-control" id="computerName"
-									placeholder="Computer name" name="computerName">
+									placeholder="<spring:message code="computerName"/>" name="computerName" path="name"/>
 							</div>
 							<div class="form-group">
-								<label for="introduced"><spring:message code="introduced"/></label> <span
+								<form:label path="name" for="introduced"><spring:message code="introduced"/></form:label> <span
 									class="error"><spring:message code="error.fieldRequired"/></span> <input type="date"
 									class="form-control" id="introduced"
 									placeholder="Introduced date" name="introduced">
@@ -72,11 +75,11 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input id="submit" type="submit" value=" <spring:message code="add"/> "
+							<input id="add" type="submit" value=" <spring:message code="add"/> "
 								class="btn btn-primary"> <spring:message code="or"/> <a href="${dashboard}"
 								class="btn btn-default"><spring:message code="cancel"/></a>
 						</div>
-					</form>
+					</form:form>
 				</div>
 			</div>
 		</div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title><spring:message code="title"/><</title>
+<title><spring:message code="title"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
@@ -13,19 +13,8 @@
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <a class="navbar-brand" href="${dashboard}"><spring:message code="home"/></a>
-        </div>
-    </header>
-    <section id="main">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-8 col-xs-offset-2 box">
-                    <div class="label label-default pull-right">
-                        id: ${computer.id}
-                    </div>
-                   <h1><spring:message code="title.editComputer"/></h1>
-                    
-                    
-					<form action="${editComputer}" method="GET" id="langForm">
+             
+					<form action="" method="GET" id="langForm">
 						<input type="radio" name="lang" value="en"
 							class="btn btn-default"
 							onclick="$(this).closest('form').submit();"
@@ -38,15 +27,27 @@
 							${(sessionScope.lang == 'fr')?"checked":""}> Français
 							<img src="img/fr.png">
 					</form>
+        </div>
+    </header>
+    <section id="main">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-8 col-xs-offset-2 box">
+                    <div class="label label-default pull-right">
+                        id: ${computer.id}
+                    </div>
+                   <h1><spring:message code="title.editComputer"/></h1>
+                    
+                   
                     
 
                     <form action="${editComputer}" method="POST">
-                        <input type="hidden" value="${computer.id}" id="id" name="computerId"/> 
+                        <input type="hidden" value="${computer.id}" id="id" name="id"/> 
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName"><spring:message code="computerName" /></label>
                                 <span class="error"><spring:message code="error.fieldRequired"/></span>
-                                <input required type="text" class="form-control" id="computerName" value="${computer.name}" placeholder="Computer name" name="computerName">
+                                <input required type="text" class="form-control" id="computerName" value="${computer.name}" placeholder="Computer name" name="name">
                             </div>
                             <div class="form-group">
                                 <label for="introduced"><spring:message code="introduced"/></label>
@@ -58,14 +59,15 @@
                                 <span class="error"><spring:message code="error.introDisco"/></span>
                                 <input type="date" class="form-control" id="discontinued" value="${computer.discontinued}" placeholder="Discontinued date" name="discontinued">
                             </div>
+                             
                             <div class="form-group">
                                 <label for="companyId"><spring:message code="company"/></label>
-                                <select class="form-control" id="companyId" name="companyId">
-									<option value="null" ${computer.company.name=="null"?"":"selected"}><spring:message code="unknown"/></option>
+                                <select class="form-control" id="companyId" name="company.id">
+									<option value="null" ${computer.company=="null"?"":"selected"} name="company.name">
+									<spring:message code="unknown"/></option>
 									<c:forEach items="${companies}" var="company">
-									<option value="${company.id}" ${company.name==computer.company.name?"selected":""}>
+									<option value="${company.id}" ${company.name==computer.company.name?"selected":""} name="company.name">
 									${company.name}</option>
-									<label type="hidden" value="${company.name}" name="companyId"></label> 
 									</c:forEach>
 								</select>
                             </div>            

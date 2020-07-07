@@ -22,6 +22,7 @@
 <link href="css/main.css" rel="stylesheet" media="screen">
 <link href="css/frontValidation.css" rel="stylesheet" media="screen">
 
+<!-- 
 <p>computerAZ ${sessionScope.computerAZ}</p>
 <p>computerZA ${sessionScope.computerZA}</p>
 <p>companyAZ ${sessionScope.companyAZ}</p>
@@ -34,7 +35,7 @@
 <p>test bool ${sessionScope.companyAZ==false and sessionScope.companyZA}</p>
 <p>test bool ${(not sessionScope.companyAZ and not sessionScope.companyZA)?"hey":"hey no"}</p>
 
-
+ -->
 
 
 </head>
@@ -161,7 +162,7 @@
 						<th>Company
 							<div class="btn-group btn-group-sm pull-right" role="group">
 								
-								<form action="${dashboard}" method="POST">
+								<form:form action="${dashboard}" method="POST" modelAttribute="order">
 										<input type="radio"  name="company" 
 										value="A-Z" class="btn btn-default" 
 										onclick="$(this).closest('form').submit();" ${(companyAZ)?"checked":""}>
@@ -183,18 +184,26 @@
 					</tr>
 				</thead>
 				<!-- Browse attribute computers -->
-				<tbody id="results">
-					<c:forEach items="${computers}" var="computer">
-						<tr>
-							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="${computer.id}"></td>
-							<td><a href="${editComputer}" onclick="">${computer.name}</a></td>
-							<td>${computer.introduced}</td>
-							<td>${computer.discontinued}</td>
-							<td>${computer.company.name}</td>
-						</tr>
-					</c:forEach>
-				</tbody>
+				
+				
+					
+						<tbody id="results">
+							<c:forEach items="${computers}" var="computer">
+								<tr>
+									<td class="editMode"><input type="checkbox" name="id"
+										class="cb" value="${computer.id}" onclick="$(this).closest('form').submit();">
+										</td>
+									<td><a href="${editComputer}?id=${computer.id}">
+									${computer.name}</a></td>
+									<td>${computer.introduced}</td>
+									<td>${computer.discontinued}</td>
+									<td>${computer.company.name}</td> 								
+								</tr>
+							</c:forEach>
+						
+						</tbody>
+					
+				
 			</table>
 		</div>
 	</section>

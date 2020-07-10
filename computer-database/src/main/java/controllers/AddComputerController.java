@@ -67,7 +67,11 @@ public class AddComputerController {
 	@Autowired
 	Validation validation;
 
+	@Autowired
+	Computer computer;
 	
+	@Autowired
+	Company company;
 	
 	public static final String ADDCOMPUTER = "addComputer";
 	public static final String DASHBOARD = "dashboard";
@@ -85,7 +89,7 @@ public class AddComputerController {
 	
 
 	@PostMapping
-	public String doPost(@Valid @ModelAttribute(name="computer") ComputerDto computer,  BindingResult result, ModelMap model) throws DateParseException, NameEmptyException, DiscoMustIfIntroException,
+	public String doPost(@Valid @ModelAttribute(name="computerDto") ComputerDto computerDto, BindingResult result, ModelMap model) throws DateParseException, NameEmptyException, DiscoMustIfIntroException,
 			After1970Exception, Before2038Exception, DateIntroDiscoException {
 
 //		// DTO
@@ -93,22 +97,25 @@ public class AddComputerController {
 //		ComputerDto computerDto = new ComputerDtoBuilder().withName(computerName).IntroducedIn(intro)
 //				.DiscontinuedIn(disco).withCompanyDto(companyDto).build();
 //		
-//		/*if (bindingResult.hasErrors()) {
+//		if (bindingResult.hasErrors()) {
 //			System.out.println("----- error ----");
-//		}*/
-//		
-//		 //Mapping
-//		 Computer computer = mapperDto.fromComputerDtoToComputer(computerDto);
+//		}
+		
+		 System.out.println(computerDto);
+		 //Mapping
+		 //computer = mapperDto.fromComputerDtoToComputer(computerDto);
 //		 //Validation
 //		 validation.createComputer(computer);
 //		 //Service
 //		 //service.addComputer(computer);
 //		 
 		 if (result.hasErrors()) {
-	            return "error";
+	            System.out.println("there are errors"+result.getFieldError());
 	        }
 		 
-		 computer = computerService.save(computer); 
+		
+		 
+		 //computerService.save(computer); 
 		 return ADDCOMPUTER;
 
 	}

@@ -36,6 +36,22 @@ form .erreur {
 	color: red;
 }
 
+#user{
+	display:flex;
+	border:white;
+	color:black;
+	padding:10px;
+	font-size: 30px;
+	
+}
+
+#user a{
+	padding:0px;
+	color : red;
+}
+
+
+
 #langForm {
 	position: absolute;
 	top: 10%;

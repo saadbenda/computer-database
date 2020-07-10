@@ -14,7 +14,7 @@ import persistence.CompanyRepository;
 import persistence.ComputerRepository;
 
 @Service
-@Transactional
+//@Transactional
 public class ComputerService {
 	@Autowired 
 	ComputerRepository computerRepo;

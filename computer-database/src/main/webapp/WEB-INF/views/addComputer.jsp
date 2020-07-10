@@ -19,15 +19,8 @@ logger.info("This is Guru Logging debugger"); %>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="${dashboard}"><spring:message code="home"/></a>
-		</div>
-	</header>	
-	<section id="main">
-		<div class="container">
-			<div class="row">
-				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1><spring:message code="title.addComputer"/></h1>
-					
-					<form action="#" method="GET" id="langForm">
+			
+			<form action="#" method="GET" id="langForm">
 						<input type="radio" name="lang" value="en"
 							class="btn btn-default"
 							onclick="$(this).closest('form').submit();"
@@ -37,45 +30,59 @@ logger.info("This is Guru Logging debugger"); %>
 							 name="lang" value="fr"
 							class="btn btn-default"
 							onclick="$(this).closest('form').submit();"
-							${(sessionScope.lang == 'fr')?"checked":""}> FranÁais
+							${(sessionScope.lang == 'fr')?"checked":""}> Fran√ßais
 							<img src="img/fr.png">
 					</form>
+			
+		</div>
+	</header>
+	<div id="user">
+			<p>user: </p>
+			<br>
+			<a href="#">logout</a>
+	</div>	
+	<section id="main">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-8 col-xs-offset-2 box">
+					<h1><spring:message code="title.addComputer"/></h1>
+					
+					
 
-					<form:form action="${addComputer}" method="POST" id="addComputer" name="addComputer" modelAttribute="computer">
+					<form:form action="${addComputer}" method="POST" id="addComputer" name="addComputer" modelAttribute="computerDto">
 						<fieldset>
 							<div class="form-group">
-								<form:label path="name" for="computerName"><spring:message code="computerName" /></form:label> <span
-									class="error"><spring:message code="error.fieldRequired"/></span> <form:input type="text"
+								<label for="computerName"><spring:message code="computerName" /></label> <span
+									class="error"><spring:message code="error.fieldRequired"/></span> <input type="text"
 									class="form-control" id="computerName"
-									placeholder="<spring:message code="computerName"/>" name="computerName" path="name"/>
+									placeholder='<spring:message code="computerName"/>' name="name" />
 							</div>
 							<div class="form-group">
-								<form:label path="name" for="introduced"><spring:message code="introduced"/></form:label> <span
+								<label for="introduced"><spring:message code="introduced"/></label> <span
 									class="error"><spring:message code="error.fieldRequired"/></span> <input type="date"
 									class="form-control" id="introduced"
-									placeholder="Introduced date" name="introduced">
+									placeholder="<spring:message code="introduced"/>" name="introduced" />
 							</div>
 							<div class="form-group">
 								<label for="discontinued"><spring:message code="discontinued"/></label> <span
 									class="error"><spring:message code="error.introDisco"/></span> <input type="date" class="form-control"
-									id="discontinued" placeholder="Discontinued date"
+									id="discontinued" placeholder="<spring:message code="discontinued"/>"
 									name="discontinued">
 
 							</div>
 							<div class="form-group">
-								<label for="companyId"><spring:message code="company"/></label> <select
+								<label  for="companyId"><spring:message code="company"/></label> <select
 									class="form-control" id="companyId" name="companyId">
 									<option value="null"><spring:message code="unknown"/></option>
 									<c:forEach items="${companies}" var="company">
 										<option value="${company.id}">${company.name}</option>
-
 									</c:forEach>
 
 								</select>
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input id="add" type="submit" value=" <spring:message code="add"/> "
+							<input id="add" type="submit" value='<spring:message code="add"/>'
 								class="btn btn-primary"> <spring:message code="or"/> <a href="${dashboard}"
 								class="btn btn-default"><spring:message code="cancel"/></a>
 						</div>

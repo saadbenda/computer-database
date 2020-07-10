@@ -3,9 +3,12 @@ package validation;
 import java.time.LocalDate;
 import java.util.Arrays;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import dto.UserDto;
 import exceptions.After1970Exception;
 import exceptions.Before2038Exception;
 import exceptions.DateIntroDiscoException;
@@ -13,12 +16,16 @@ import exceptions.DiscoMustIfIntroException;
 import mapper.MapperDates;
 
 import model.Computer;
+import persistence.UserRepository;
 
 @Component
 public class Validation {
 
 	@Autowired
 	MapperDates mapperDates;
+	
+	@Autowired
+	UserRepository userRepo;
 
 	public void createComputer(Computer computer) throws DiscoMustIfIntroException, After1970Exception, Before2038Exception, DateIntroDiscoException  {
 		LocalDate intro = computer.getIntroduced();
@@ -59,5 +66,7 @@ public class Validation {
 			throw new DateIntroDiscoException();
 		}
 	}
+
+	
 
 }

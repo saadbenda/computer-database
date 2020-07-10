@@ -10,3 +10,6 @@
 <c:set var="dashboard" value="dashboard" />
 <c:set var="addComputer" value="addComputer" />
 <c:set var="editComputer" value="editComputer" />
+<c:set var="register" value="register" />
+<c:set var="login" value="login" />
+

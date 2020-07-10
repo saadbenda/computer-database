@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -8,7 +7,7 @@
 	<groupId>com.excilys</groupId>
 	<artifactId>computer-database</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>pom</packaging>
 
 	<name>computer-database Maven Webapp</name>
 	<url>http://</url>
@@ -72,6 +71,25 @@
 			<version>3.4.5</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+
 
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -125,7 +143,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		
+
 
 		<dependency>
 			<groupId>org.springframework.data</groupId>
@@ -203,4 +221,14 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<modules>
+		<module>service</module>
+		<module>core</module>
+		<module>binding</module>
+		<module>persistence</module>
+		<module>console</module>
+		<module>webapp</module>
+
+
+	</modules>
 </project>

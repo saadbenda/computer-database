@@ -23,13 +23,13 @@ public interface ComputerRepository extends JpaRepository<Computer, Long> {
     
     Computer save(Computer computer); 
     
-    List<Computer> findAll();
+    //List<Computer> findAll();
 
-	Computer findById(String id);
+	//Computer findById(String id);
 
-	List<Computer> findByName();
+	//List<Computer> findByName();
 
-	List<Computer> findByNameContainingIgnoreCase(String computerName);
+	//List<Computer> findByNameContainingIgnoreCase(String computerName);
 	
 	
 	

@@ -7,6 +7,7 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -168,7 +169,7 @@ public class SpringMvcConfiguration implements WebMvcConfigurer {
 		return dataSource;
 	}
 
-	@Bean
+	@Autowired
 	public JdbcTemplate jdbcTemplateBean() {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSourceBean());
 		return jdbcTemplate;

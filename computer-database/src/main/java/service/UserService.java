@@ -1,39 +1,74 @@
 package service;
 
+import java.util.Arrays;
+import java.util.Optional;
+
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User.UserBuilder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import exceptions.EmailExistsException;
 import model.User;
 import persistence.UserRepository;
 
 
-
 @Service
-public class UserService {
+@Transactional
+
+public class UserService implements UserDetailsService{
 	
-	@Autowired
-	User user;
+//	@Autowired
+//	User user;
 	
 	@Autowired
 	UserRepository userRepo;
-
-	public User addUser(User user) {
-		if (emailExist(accountDto.getEmail())) {
-	        throw new EmailExistsException(
-	          "There is an account with that email adress:" + accountDto.getEmail());
+	
+	@Autowired
+	PasswordEncoder passwordEncoder;
+	
+	 public PasswordEncoder passwordEncoder2() {
+	        return new BCryptPasswordEncoder();
 	    }
-		
-		
-	   
-	    user.setFirstName(accountDto.getFirstName());
-	    user.setLastName(accountDto.getLastName());
-	    
-	    user.setPassword(passwordEncoder.encode(accountDto.getPassword()));
-	    
-	    user.setEmail(accountDto.getEmail());
-	    user.setRole(new Role(Integer.valueOf(1), user));
+
+	public User saveUser(@Valid User userl) {
+	    //System.out.println("user in service : "+user);
+	    User user = new User();
+	    user.setEmail("saad@saad.com");
+	    user.setRole("ADMIN");
+	    user.setFirstName("saad");
+	    user.setLastName("saad");
+	    user.setPassword(new BCryptPasswordEncoder().encode("password"));
+	    //user.setRoles(Arrays.asList();
 	    return userRepo.save(user);
 		
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		Optional<User> optUser = userRepo.findByEmail(username);
+		UserBuilder userBuilder = null;
+		if(optUser.isPresent()) {
+			User user  = optUser.get();
+			userBuilder = org.springframework.security.core.userdetails.User
+					.withUsername(user.getEmail())
+					.password(user.getPassword())
+					.roles(user.getRole());
+			System.out.println(user);
+			
+		}else {
+			throw new EmailExistsException();
+		}
+		
+		return userBuilder.build();
 	}
 
 }

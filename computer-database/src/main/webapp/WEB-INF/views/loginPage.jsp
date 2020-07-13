@@ -73,7 +73,7 @@ body {
     <form action="${login}" method="post">
         <h2 class="text-center">Login</h2>   
         <div class="form-group has-error">
-        	<input type="text" class="form-control" name="email" placeholder="Email" required="required">
+        	<input type="text" class="form-control" name="username" placeholder="Email" required="required">
         </div>
 		<div class="form-group">
             <input type="password" class="form-control" name="password" placeholder="Password" required="required">

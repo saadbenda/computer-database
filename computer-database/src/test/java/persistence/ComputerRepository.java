@@ -1,4 +1,4 @@
-package controllers;
+package persistence;
 
 import org.junit.Before;
 import org.junit.Test;

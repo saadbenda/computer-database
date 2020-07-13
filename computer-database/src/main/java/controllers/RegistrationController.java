@@ -12,11 +12,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import dto.UserDto;
+import model.User;
+import service.UserService;
+//import validation.UserValidation;
 import validation.Validation;
 
 @Controller
@@ -26,24 +30,43 @@ import validation.Validation;
 //@Validated
 public class RegistrationController {
 	
+//	@Autowired
+//	UserValidation userVal;
+	
 	@Autowired
-	Validation validation;
+	UserService userService;
+	
+	@Autowired
+	User user;
+	
 	
 	@GetMapping
-	public String showRegistrationForm(WebRequest request, Model model) {
+	public String showRegistrationForm() {
 		UserDto userDto = new UserDto();
-		model.addAttribute("user", userDto);
+		//model.addAttribute("user", userDto);
 		return "register";
 	}
+	
+	
+	
+	
+	
 	@PostMapping
-	public String registerUserAccount(@ModelAttribute("user") @Valid UserDto user, HttpServletRequest request, ModelMap model, Errors errors) {
+	public String registerUserAccount(@ModelAttribute("user") @Valid UserDto userDto, HttpServletRequest request, ModelMap model, Errors errors) {
 		ModelAndView mav = new ModelAndView();
 		
 		if (errors.hasErrors()) {
 			errors.getFieldErrors();
 		}
 		
-		validation.emailExists(user);
+		//userVal.emailExists(user);
+		
+		user.setEmail(userDto.getEmail());
+		user.setEmail(userDto.getPassword());
+		
+		
+		
+		userService.saveUser(user);
 		
 		/*try {
 	        User registered = userService.registerNewUserAccount(userDto);

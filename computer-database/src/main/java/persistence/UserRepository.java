@@ -14,7 +14,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 	Optional<User> findById(Long id);
 	@Override
 	boolean existsById(Long id);
-	@Override
 	Optional<User> findByEmail(String email);
 	
 	

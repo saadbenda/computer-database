@@ -37,7 +37,7 @@ public class GlobalExceptionHandler{
 	private static final String ERROR403 = "403";
 	private  static final String ERROR404 = "404";
 	private static final String ERROR500 = "500";
-
+	@ResponseBody
 	@ExceptionHandler({RowMapException.class, CompaniesNotFoundException.class, UpdateException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ModelAndView handleInternalServerError(Exception e, WebRequest request) {
@@ -50,14 +50,14 @@ public class GlobalExceptionHandler{
     public ModelAndView handForbidden(Exception e, WebRequest request) {
 		return display(e, ERROR403);
     }*/
-	
+	@ResponseBody
 	@ExceptionHandler({After1970Exception.class, Before2038Exception.class, DateIntroDiscoException.class, DateNullException.class, DateParseException.class, DiscoMustIfIntroException.class, NameEmptyException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ModelAndView handleBadRequest(Exception e, WebRequest request) {
 		return display(e, ERROR400);
 	    
     }
-	
+	@ResponseBody
 	@ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ModelAndView handleNotFound(Exception e, WebRequest request) {

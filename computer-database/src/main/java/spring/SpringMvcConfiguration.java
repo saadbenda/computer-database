@@ -49,12 +49,13 @@ import com.zaxxer.hikari.HikariDataSource;
 @ComponentScan({ "service", "persistence", "mapper", "validation", "controllers","model" })
 public class SpringMvcConfiguration implements WebMvcConfigurer {
 	
+
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/").setViewName("/dashboard");
-		registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		 registry.addViewController("/login").setViewName("loginPage");
+	        //registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+		
 	}
-	
 	
 	/*
 	@Bean 
@@ -82,29 +83,75 @@ public class SpringMvcConfiguration implements WebMvcConfigurer {
       return txManager;
     }
     */
-	  @Bean
-	    public PlatformTransactionManager transactionManager() {
-	        
-	        JpaTransactionManager transactionManager = new JpaTransactionManager();
-	        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
-	        return transactionManager;
-	        
-	    }
-	    @Bean
-	    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
-	        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-	        em.setDataSource(dataSourceBean());
-	        em.setPackagesToScan(new String[] { "model" });
-	        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-	        em.setJpaVendorAdapter(vendorAdapter);
-	        em.setJpaProperties(additionalProperties());
-	        return em;
-	    }
-	    @Bean
-	    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
-	        
-	        return new PersistenceExceptionTranslationPostProcessor();
-	    }
+//	  @Bean
+//	    public PlatformTransactionManager transactionManager() {
+//	        
+//	        JpaTransactionManager transactionManager = new JpaTransactionManager();
+//	        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+//	        return transactionManager;
+//	        
+//	    }
+//	    @Bean
+//	    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+//	        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+//	        em.setDataSource(dataSourceBean());
+//	        em.setPackagesToScan(new String[] { "model" });
+//	        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+//	        em.setJpaVendorAdapter(vendorAdapter);
+//	        em.setJpaProperties(additionalProperties());
+//	        return em;
+//	    }
+	
+	
+//	@Bean
+//	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+//
+//		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+//		vendorAdapter.setGenerateDdl(true);
+//
+//		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+//		factory.setJpaVendorAdapter(vendorAdapter);
+//		factory.setPackagesToScan("model");
+//		factory.setDataSource(dataSourceBean());
+//		return factory;
+//	}
+//
+//	@Bean
+//	public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+//
+//		JpaTransactionManager txManager = new JpaTransactionManager();
+//		txManager.setEntityManagerFactory(entityManagerFactory);
+//		return txManager;
+//	}
+
+	
+	
+	@Bean
+    public PlatformTransactionManager transactionManager() {
+        
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+        return transactionManager;
+        
+    }
+    @Bean
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSourceBean());
+        em.setPackagesToScan(new String[] { "model" });
+        JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        em.setJpaProperties(additionalProperties());
+        return em;
+    }
+    @Bean
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+        
+        return new PersistenceExceptionTranslationPostProcessor();
+    }
+	
+	
+	
 
 	    Properties additionalProperties() {
 

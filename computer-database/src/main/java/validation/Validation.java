@@ -16,7 +16,6 @@ import exceptions.DiscoMustIfIntroException;
 import mapper.MapperDates;
 
 import model.Computer;
-import persistence.UserRepository;
 
 @Component
 public class Validation {
@@ -24,8 +23,7 @@ public class Validation {
 	@Autowired
 	MapperDates mapperDates;
 	
-	@Autowired
-	UserRepository userRepo;
+	
 
 	public void createComputer(Computer computer) throws DiscoMustIfIntroException, After1970Exception, Before2038Exception, DateIntroDiscoException  {
 		LocalDate intro = computer.getIntroduced();

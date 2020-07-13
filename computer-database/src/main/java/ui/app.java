@@ -1,19 +1,12 @@
 package ui;
 
-import java.util.Scanner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import model.Company;
-import service.Service;
-import validation.Validation;
+@SpringBootApplication
+public class App {
 
-public class app {
-	public static void main(String[] args)  {
-		//new Cli();
-		//Service s = new Service();
-		//Company c = s.createCompany("saad");
-		//s.createComputer("hey", "null", "null", c);
-		//launch servlet
-		
-		
-	}
+  public static void main(String... args) {
+    SpringApplication.run(App.class, args);
+  }
 }

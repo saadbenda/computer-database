@@ -1,0 +1,47 @@
+package mapper;
+
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
+
+import exceptions.RowMapException;
+import model.Computer;
+import service.Service;
+
+@Component
+public class ComputerMapper implements RowMapper<Computer> {
+
+	
+	
+	@Autowired
+	Service service;
+	
+	@Autowired
+	MapperDates mapperDates;
+
+	@Override
+	public Computer mapRow(ResultSet rs, int rowNum)  throws RowMapException {
+		Computer computer = null;
+		try {
+		long companyId = rs.getLong("company.id");
+		String companyName = rs.getString("company.name");
+		long computerId = rs.getLong("computer.id");
+		String computerName = rs.getString("computer.name");
+		Date intro = rs.getDate("introduced");
+		LocalDate introduced = mapperDates.fromDateToLocalDate(intro);
+		Date disco = rs.getDate("discontinued");
+		LocalDate discontinued = mapperDates.fromDateToLocalDate(disco);
+		computer = service.createComputer(computerId, computerName, introduced, discontinued, companyId, companyName);	
+		} catch(SQLException e) {
+			throw new RowMapException(e);
+		}
+		return computer;
+		
+		
+	}
+
+}

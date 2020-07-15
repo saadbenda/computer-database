@@ -12,7 +12,7 @@
    <packaging>jar</packaging>
 
   <name>binding</name>
-  <description>A simple binding.</description>
+  <description>A simple bind.</description>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
